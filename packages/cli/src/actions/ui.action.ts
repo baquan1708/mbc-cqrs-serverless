@@ -1,29 +1,59 @@
 import { execSync } from 'child_process'
 import { Command } from 'commander'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import inquirer from 'inquirer'
 import path from 'path'
 import { rimrafSync } from 'rimraf'
 
 const repoUrl = 'https://gitlab.com/mbc-net/common/mbc-cqrs-ui-common.git'
+const questions = [
+  {
+    type: 'input',
+    name: 'pathDir',
+    message: 'Enter the place to install:',
+    validate: (input) => input.length > 0 || 'Please enter a valid file path',
+  },
+  {
+    type: 'list',
+    name: 'component',
+    message: 'Select the element to install:',
+    choices: ['all', 'appsync', 'component'],
+  },
+  {
+    type: 'input',
+    name: 'branch',
+    message: 'Enter the branch name:',
+    validate: (input) => input.length > 0 || 'Please enter a valid branch name',
+    default: 'main',
+  },
 
-const componentOptions = ['all', 'appsync', 'component']
+  {
+    type: 'list',
+    name: 'auth',
+    message: 'Select authentication method:',
+    choices: ['SSH', 'HTTPS - Token'], // Modified choice
+  },
+]
 
 /* eslint-disable no-console */
-export default async function uiAction(options: object, command: Command) {
-  console.log(
-    `Executing command '${command.name()}' for application with options '${JSON.stringify(
-      options,
-    )}'`,
-  )
+export default async function uiAction() {
+  const answers = await inquirer.prompt(questions)
 
-  const { branch, auth, component, pathDir, token = '' } = options as any
+  const { branch, component, pathDir, authMethod } = answers
 
-  if (
-    componentOptions.findIndex((optionName) => optionName === component) === -1
-  ) {
-    console.error(
-      `Please choose correct component options: ${componentOptions.join(', ')}`,
-    )
+  let gitUrl
+  if (authMethod === 'HTTPS - Token') {
+    const tokenAnswer = await inquirer.prompt([
+      {
+        type: 'password',
+        name: 'token',
+        message: 'Enter your token:',
+        mask: '*', // Mask the token input
+      },
+    ])
+    gitUrl = repoUrl.replace(/^https:\/\//, `https://${tokenAnswer}@`)
+  } else {
+    gitUrl = 'git@gitlab.com:mbc-net/common/mbc-cqrs-ui-common.git'
   }
 
   // Check command run in base src
@@ -48,11 +78,10 @@ export default async function uiAction(options: object, command: Command) {
 
   // Copy source
   installTemplate({
-    auth,
-    token,
     pathDir,
     branch,
     component,
+    gitUrl,
   })
 
   // Modify tsconfig path alias
@@ -84,34 +113,22 @@ export default async function uiAction(options: object, command: Command) {
 }
 
 const installTemplate = ({
-  auth,
-  token,
   pathDir,
   branch,
   component,
+  gitUrl,
 }: {
-  auth: string
-  token: string
   pathDir: string
   branch: string
   component: string
+  gitUrl: string
 }) => {
-  let gitUrl = repoUrl
-
-  if (auth === 'SSH') {
-    gitUrl = 'git@gitlab.com:mbc-net/common/mbc-cqrs-ui-common.git'
-  } else if (auth === 'HTTPS - Token') {
-    gitUrl = repoUrl.replace(/^https:\/\//, `https://${token}@`)
-  }
-
-  // Copy source
   const destDir = path.join(process.cwd(), pathDir)
   console.log('Adding MBC common ui in', destDir)
   mkdirSync(destDir, { recursive: true })
   const logs = execSync(`git clone --branch ${branch} ${gitUrl} ${destDir}`)
   console.log(logs.toString())
 
-  // remove .git
   rimrafSync(`${destDir}/.git`)
 
   if (component === 'component') {
