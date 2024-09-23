@@ -38,3 +38,6 @@ dist/
 
 # nestjs repl
 .nestjs_repl_history
+
+# test report
+report
