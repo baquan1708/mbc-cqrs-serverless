@@ -1,20 +1,13 @@
 name: Run test and publish
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - develop
       - main
 
-permissions:
-  contents: write
-  actions: read
-  checks: write
-
 jobs:
   unit_tests:
-    if: github.event.pull_request.merged == true # Condition
     name: Unit Test
     runs-on: ubuntu-latest
     steps:
@@ -80,7 +73,6 @@ jobs:
       #     fail-on-error: 'true' #  Set action as failed if test report contains any failed test
 
   publish:
-    if: github.event.pull_request.merged == true # Condition
     name: Publish
     needs: e2e_tests
     runs-on: ubuntu-latest
