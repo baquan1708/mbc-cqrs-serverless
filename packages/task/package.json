@@ -1,6 +1,6 @@
 {
   "name": "@thinhnguyen_zsy/task",
-  "version": "0.0.63-alpha.0",
+  "version": "0.0.64-alpha.0",
   "description": "long-running task",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,6 +26,6 @@
     "access": "public"
   },
   "dependencies": {
-    "@thinhnguyen_zsy/core": "^0.0.63-alpha.0"
+    "@thinhnguyen_zsy/core": "^0.0.64-alpha.0"
   }
 }
