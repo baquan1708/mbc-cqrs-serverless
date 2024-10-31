@@ -9,5 +9,6 @@ export function newCommand(program: Command) {
     .description(
       'Generate a new CQRS application using the MBC CQRS serverless framework',
     )
+    .option('-v, --ver <string>', 'specify framework version', 'latest')
     .action(newAction)
 }

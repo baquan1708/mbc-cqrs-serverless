@@ -22,13 +22,31 @@ export default async function newAction(
     )}'`,
   )
 
+  const { ver } = options as any
+
+  let packageVersion
+
+  if (ver === 'latest') {
+    packageVersion = getPackageVersion('@mbc-cqrs-serverless/core', true)[0]
+  } else {
+    const versions = getPackageVersion('@mbc-cqrs-serverless/core')
+    if (!versions.includes(ver)) {
+      console.log(
+        'The specified package version does not exist. Please chose a valid version!\n',
+        versions,
+      )
+      return
+    }
+    packageVersion = ver
+  }
+
   const destDir = path.join(process.cwd(), name)
   console.log('Generating MBC cqrs serverless application in', destDir)
   mkdirSync(destDir, { recursive: true })
   cpSync(path.join(__dirname, '../../templates'), destDir, { recursive: true })
 
   // upgrade package
-  useLatestPackageVersion(destDir, name)
+  usePackageVersion(destDir, packageVersion, name)
 
   // mv gitignore .gitignore
   const gitignore = path.join(destDir, 'gitignore')
@@ -47,7 +65,11 @@ export default async function newAction(
   console.log(logs.toString())
 }
 
-function useLatestPackageVersion(destDir: string, name?: string) {
+function usePackageVersion(
+  destDir: string,
+  packageVersion: string,
+  name?: string,
+) {
   const packageJson = JSON.parse(
     readFileSync(path.join(__dirname, '../../package.json')).toString(),
   )
@@ -58,16 +80,29 @@ function useLatestPackageVersion(destDir: string, name?: string) {
     tplPackageJson.name = name
   }
 
-  tplPackageJson.dependencies['@mbc-cqrs-serverless/core'] =
-    packageJson.devDependencies['@mbc-cqrs-serverless/core']
+  tplPackageJson.dependencies['@mbc-cqrs-serverless/core'] = packageVersion
   tplPackageJson.devDependencies['@mbc-cqrs-serverless/cli'] =
     packageJson.version
 
   writeFileSync(fname, JSON.stringify(tplPackageJson, null, 2))
 }
 
+function getPackageVersion(packageName: string, isLatest = false): string[] {
+  if (isLatest) {
+    const latestVersion = execSync(`npm view ${packageName} dist-tags.latest`)
+      .toString()
+      .trim()
+    return [latestVersion]
+  }
+
+  const versions = JSON.parse(
+    execSync(`npm view ${packageName} versions --json`).toString(),
+  ) as string[]
+  return versions
+}
+
 export let exportsForTesting = {
-  useLatestPackageVersion,
+  usePackageVersion,
 }
 if (process.env.NODE_ENV !== 'test') {
   exportsForTesting = undefined
