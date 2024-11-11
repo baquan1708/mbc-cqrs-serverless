@@ -1,0 +1,3297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test for InfraStack 1`] = `
+{
+  "Outputs": {
+    "GraphQLAPIKey": {
+      "Value": {
+        "Fn::GetAtt": [
+          "realtimeDefaultApiKeyBD0EC5CB",
+          "ApiKey",
+        ],
+      },
+    },
+    "GraphQLAPIURL": {
+      "Value": {
+        "Fn::GetAtt": [
+          "realtime0CF38FF2",
+          "GraphQLUrl",
+        ],
+      },
+    },
+    "HttpApiUrl": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "mainapiC7DC6378",
+            },
+            ".execute-api.ap-northeast-1.",
+            {
+              "Ref": "AWS::URLSuffix",
+            },
+            "/",
+          ],
+        ],
+      },
+    },
+    "StateMachineArn": {
+      "Value": {
+        "Ref": "commandhandlerstatemachine937D91FB",
+      },
+    },
+    "UserPoolClientId": {
+      "Value": {
+        "Ref": "apigwclientE7D084A5",
+      },
+    },
+    "UserPoolId": {
+      "Value": "ap-northeast-1_wdEnqXXXX",
+    },
+    "httpdistributiondomain": {
+      "Value": {
+        "Fn::GetAtt": [
+          "httpdistribution87A15827",
+          "DomainName",
+        ],
+      },
+    },
+    "mainserviceLoadBalancerDNS4F856933": {
+      "Value": {
+        "Fn::GetAtt": [
+          "mainserviceLB73202B1B",
+          "DNSName",
+        ],
+      },
+    },
+    "mainserviceServiceURL06A5245F": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "mainserviceLB73202B1B",
+                "DNSName",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
+          "S3Key": "ce2f3595a340d6c519a65888ef97e3b9b64f053f83608e32cc28162e22d7d99a.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "Timeout": 120,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AppSyncCnameRecord408D9525": {
+      "Properties": {
+        "HostedZoneId": "Z08229276XXXXXX769G0",
+        "Name": "appsync.test-domain.xyz.",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "realtimeDomainName01674B94",
+              "AppSyncDomainName",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiB28EAD8E4": {
+      "DependsOn": [
+        "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8",
+        "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
+          "S3Key": "a717c7f64552f4a301aa858b6ff693458c0adbe8dbe22072e1432ecee63aa972.zip",
+        },
+        "Handler": "bootstrap",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
+            "Arn",
+          ],
+        },
+        "Runtime": "provided.al2023",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "Timeout": 525600,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:GetAuthorizationToken",
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:GetRepositoryPolicy",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "ecr:DescribeImages",
+                "ecr:BatchGetImage",
+                "ecr:ListTagsForResource",
+                "ecr:DescribeImageScanFindings",
+                "ecr:InitiateLayerUpload",
+                "ecr:UploadLayerPart",
+                "ecr:CompleteLayerUpload",
+                "ecr:PutImage",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8",
+        "Roles": [
+          {
+            "Ref": "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "alarmsnsFB7BBC3B": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TopicName": "dev-test-alarm-sns",
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "apigwclientE7D084A5": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "implicit",
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "profile",
+          "phone",
+          "email",
+          "openid",
+          "aws.cognito.signin.user.admin",
+        ],
+        "CallbackURLs": [
+          "https://example.com",
+        ],
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": "ap-northeast-1_wdEnqXXXX",
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+    "commandhandlersfnlog9072E963": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/vendedlogs/states/dev-test--command-handler-state-machine-Logs",
+        "RetentionInDays": 180,
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "commandhandlerstatemachine937D91FB": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "commandhandlerstatemachineRoleDefaultPolicy347D4054",
+        "commandhandlerstatemachineRoleC4EA8D70",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"check_version","States":{"check_version":{"Next":"check_version_result","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$"}}},"check_version_result":{"Type":"Choice","Choices":[{"Variable":"$.result","NumericEquals":0,"Next":"history_copy"},{"Variable":"$.result","NumericEquals":1,"Next":"wait_prev_command"},{"Variable":"$.result","NumericEquals":-1,"Next":"fail"}],"Default":"wait_prev_command"},"wait_prev_command":{"Next":"history_copy","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke.waitForTaskToken","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$","taskToken.$":"$$.Task.Token"}}},"history_copy":{"Next":"transform_data","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$"}}},"transform_data":{"Next":"sync_data_all","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$"}}},"sync_data_all":{"Type":"Map","Next":"finish","ItemsPath":"$","ItemProcessor":{"ProcessorConfig":{"Mode":"INLINE"},"StartAt":"sync_data","States":{"sync_data":{"End":true,"Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$"}}}}}},"finish":{"Next":"success","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload[0][0]","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::lambda:invoke","Parameters":{"FunctionName":"",
+              {
+                "Fn::GetAtt": [
+                  "lambdaapi893CD94E",
+                  "Arn",
+                ],
+              },
+              "","Payload":{"input.$":"$","context.$":"$$"}}},"success":{"Type":"Succeed"},"fail":{"Type":"Fail","ErrorPath":"$.error","CausePath":"$.cause"}},"Comment":"A state machine that run the command stream handler"}",
+            ],
+          ],
+        },
+        "LoggingConfiguration": {
+          "Destinations": [
+            {
+              "CloudWatchLogsLogGroup": {
+                "LogGroupArn": {
+                  "Fn::GetAtt": [
+                    "commandhandlersfnlog9072E963",
+                    "Arn",
+                  ],
+                },
+              },
+            },
+          ],
+          "Level": "ALL",
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "commandhandlerstatemachineRoleC4EA8D70",
+            "Arn",
+          ],
+        },
+        "StateMachineName": "dev-test-command-handler",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TracingConfiguration": {
+          "Enabled": true,
+        },
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "commandhandlerstatemachineRoleC4EA8D70": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "states.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "commandhandlerstatemachineRoleDefaultPolicy347D4054": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "lambdaapi893CD94E",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "lambdaapi893CD94E",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "logs:CreateLogDelivery",
+                "logs:GetLogDelivery",
+                "logs:UpdateLogDelivery",
+                "logs:DeleteLogDelivery",
+                "logs:ListLogDeliveries",
+                "logs:PutResourcePolicy",
+                "logs:DescribeResourcePolicies",
+                "logs:DescribeLogGroups",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+                "xray:GetSamplingRules",
+                "xray:GetSamplingTargets",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "commandhandlerstatemachineRoleDefaultPolicy347D4054",
+        "Roles": [
+          {
+            "Ref": "commandhandlerstatemachineRoleC4EA8D70",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ddbattributes95C63151": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketName": "dev-test-ddb-attributes",
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "PUT",
+                "POST",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "MaxAge": 3000,
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "devtestdeployCustomResource19213233": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DestImage": {
+          "Fn::Join": [
+            "",
+            [
+              "docker://",
+              {
+                "Fn::Select": [
+                  4,
+                  {
+                    "Fn::Split": [
+                      ":",
+                      {
+                        "Fn::GetAtt": [
+                          "mainecrrepo8933DB52",
+                          "Arn",
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              ".dkr.ecr.",
+              {
+                "Fn::Select": [
+                  3,
+                  {
+                    "Fn::Split": [
+                      ":",
+                      {
+                        "Fn::GetAtt": [
+                          "mainecrrepo8933DB52",
+                          "Arn",
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              ".",
+              {
+                "Ref": "AWS::URLSuffix",
+              },
+              "/",
+              {
+                "Ref": "mainecrrepo8933DB52",
+              },
+              ":latest",
+            ],
+          ],
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiB28EAD8E4",
+            "Arn",
+          ],
+        },
+        "SrcImage": {
+          "Fn::Join": [
+            "",
+            [
+              "docker://",
+              {
+                "Fn::Sub": "101010101010.dkr.ecr.ap-northeast-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1:7b7dca0b917726f66c4ee736334c494eb2deccdb4ec5d19c1565f800218afd37",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "Custom::CDKBucketDeployment",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ecsapiddbpolicy10F27BEE": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:ap-northeast-1:101010101010:table/dev-test-*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ecsapiddbpolicy10F27BEE",
+        "Roles": [
+          {
+            "Ref": "ecsrole00319F80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ecsapissmpolicy4E5ADCB6": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssm:GetParameter",
+                "kms:Decrypt",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ecsapissmpolicy4E5ADCB6",
+        "Roles": [
+          {
+            "Ref": "ecsrole00319F80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ecseventsfnpolicyAF6C20CA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "states:StartExecution",
+                "states:GetExecutionHistory",
+                "states:DescribeExecution",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ecseventsfnpolicyAF6C20CA",
+        "Roles": [
+          {
+            "Ref": "ecsrole00319F80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ecsrole00319F80": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ecsroleDefaultPolicy22BA44C0": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "ddbattributes95C63151",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "ddbattributes95C63151",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "publicbucket0D82CFFB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "publicbucket0D82CFFB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "mainsnsC0381B34",
+              },
+            },
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tasksqs12D9B615",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "notifysqsEC095A61",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "appsync:GraphQL",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":appsync:ap-northeast-1:101010101010:apis/",
+                    {
+                      "Fn::GetAtt": [
+                        "realtime0CF38FF2",
+                        "ApiId",
+                      ],
+                    },
+                    "/types/Mutation/*",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ecsroleDefaultPolicy22BA44C0",
+        "Roles": [
+          {
+            "Ref": "ecsrole00319F80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ecssespolicy59EE38A5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ses:SendEmail",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ecssespolicy59EE38A5",
+        "Roles": [
+          {
+            "Ref": "ecsrole00319F80",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ecsvpclinkEC65F091": {
+      "Properties": {
+        "Name": "TestInfraStackecsvpclink7D5E2A66",
+        "SecurityGroupIds": [],
+        "SubnetIds": [
+          "p-12345",
+          "p-67890",
+        ],
+        "Tags": {
+          "env": "dev",
+          "name": "test",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::VpcLink",
+    },
+    "httpapiAccessLogs0179ABB1": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 731,
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "httpdistribution87A15827": {
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": [
+            "api.test-domain.xyz",
+          ],
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PUT",
+              "PATCH",
+              "POST",
+              "DELETE",
+            ],
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "Compress": true,
+            "OriginRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
+            "ResponseHeadersPolicyId": "60669652-455b-4ae9-85a4-c4c02393f86c",
+            "TargetOriginId": "TestInfraStackhttpdistributionOrigin13C4D9587",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": false,
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2",
+                ],
+              },
+              "DomainName": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Ref": "mainapiC7DC6378",
+                    },
+                    ".execute-api.ap-northeast-1.amazonaws.com",
+                  ],
+                ],
+              },
+              "Id": "TestInfraStackhttpdistributionOrigin13C4D9587",
+              "OriginCustomHeaders": [
+                {
+                  "HeaderName": "X-Origin-Verify",
+                  "HeaderValue": "dev-test-653338303031343731376464613638663933303936316338666463646537",
+                },
+              ],
+            },
+          ],
+          "PriceClass": "PriceClass_200",
+          "Restrictions": {
+            "GeoRestriction": {
+              "Locations": [
+                "JP",
+                "VN",
+              ],
+              "RestrictionType": "whitelist",
+            },
+          },
+          "ViewerCertificate": {
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:101010101010:certificate/6309f81c-93a7-4b25-b4be-40d86fa89ad7",
+            "MinimumProtocolVersion": "TLSv1.2_2021",
+            "SslSupportMethod": "sni-only",
+          },
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "httpdistributionarecord0FBAAC08": {
+      "Properties": {
+        "HostedZoneId": "Z08229276XXXXXX769G0",
+        "Name": "api.test-domain.xyz.",
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "httpdistribution87A15827",
+              "DomainName",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "lambdaapi893CD94E": {
+      "DependsOn": [
+        "lambdaapiServiceRoleDefaultPolicy852237F1",
+        "lambdaapiServiceRole7E4263EE",
+      ],
+      "Properties": {
+        "Architectures": [
+          "arm64",
+        ],
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
+          "S3Key": "d33f5768ee17853962a54eea13d01a3f788c91bb1046106c9bb8e0a5fe52b15c.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "APPSYNC_ENDPOINT": {
+              "Fn::GetAtt": [
+                "realtime0CF38FF2",
+                "GraphQLUrl",
+              ],
+            },
+            "APP_NAME": "test",
+            "ATTRIBUTE_LIMIT_SIZE": "389120",
+            "COGNITO_USER_POOL_ID": "ap-northeast-1_wdEnqXXXX",
+            "DATABASE_URL": "postgresql:///test/rds-account-secret@db.test-domain.xyz/mydbinstance?schema=public",
+            "EVENT_SOURCE_DISABLED": "false",
+            "FRONT_BASE_URL": "https://test.test-domain.xyz",
+            "LOG_LEVEL": "verbose",
+            "NODE_ENV": "dev",
+            "NODE_OPTIONS": "--enable-source-maps",
+            "S3_BUCKET_NAME": {
+              "Ref": "ddbattributes95C63151",
+            },
+            "S3_PUBLIC_BUCKET_NAME": {
+              "Ref": "publicbucket0D82CFFB",
+            },
+            "SES_FROM_EMAIL": "noreply@test-domain.xyz",
+            "SFN_COMMAND_ARN": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
+            "SNS_TOPIC_ARN": {
+              "Ref": "mainsnsC0381B34",
+            },
+            "TZ": "Asia/Tokyo",
+          },
+        },
+        "FunctionName": "dev-test-lambda-api",
+        "Handler": "main.handler",
+        "Layers": [
+          {
+            "Ref": "mainlayer908FE5E4",
+          },
+        ],
+        "LoggingConfig": {
+          "ApplicationLogLevel": "TRACE",
+          "LogFormat": "JSON",
+          "SystemLogLevel": "DEBUG",
+        },
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "lambdaapiServiceRole7E4263EE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "Timeout": 31536000,
+        "TracingConfig": {
+          "Mode": "Active",
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            "sg-06xxxx88ee526f823",
+          ],
+          "SubnetIds": [],
+        },
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "lambdaapiDynamoDBEventSourceTestInfraStackmastercommandtableE6C83C78574B619C": {
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "mastercommanddecsC637D29D",
+            "Table.LatestStreamArn",
+          ],
+        },
+        "FilterCriteria": {
+          "Filters": [
+            {
+              "Pattern": "{"eventName":["INSERT"]}",
+            },
+          ],
+        },
+        "FunctionName": {
+          "Ref": "lambdaapi893CD94E",
+        },
+        "StartingPosition": "TRIM_HORIZON",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "lambdaapiDynamoDBEventSourceTestInfraStacktaskstable708E175752ADBCFE": {
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "tasksdecs1B0120D7",
+            "Table.LatestStreamArn",
+          ],
+        },
+        "FilterCriteria": {
+          "Filters": [
+            {
+              "Pattern": "{"eventName":["INSERT"]}",
+            },
+          ],
+        },
+        "FunctionName": {
+          "Ref": "lambdaapi893CD94E",
+        },
+        "StartingPosition": "TRIM_HORIZON",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "lambdaapiServiceRole7E4263EE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "lambdaapiServiceRoleDefaultPolicy852237F1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "xray:PutTraceSegments",
+                "xray:PutTelemetryRecords",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tasksqs12D9B615",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "sqs:ReceiveMessage",
+                "sqs:ChangeMessageVisibility",
+                "sqs:GetQueueUrl",
+                "sqs:DeleteMessage",
+                "sqs:GetQueueAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "notifysqsEC095A61",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "dynamodb:ListStreams",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tasksdecs1B0120D7",
+                  "Table.LatestStreamArn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "mastercommanddecsC637D29D",
+                  "Table.LatestStreamArn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminAddUserToGroup",
+                "cognito-idp:AdminCreateUser",
+                "cognito-idp:AdminDeleteUser",
+                "cognito-idp:AdminDisableUser",
+                "cognito-idp:AdminEnableUser",
+                "cognito-idp:AdminSetUserPassword",
+                "cognito-idp:AdminResetUserPassword",
+                "cognito-idp:AdminUpdateUserAttributes",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":cognito-idp:ap-northeast-1:101010101010:userpool/ap-northeast-1_wdEnqXXXX",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "ddbattributes95C63151",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "ddbattributes95C63151",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "publicbucket0D82CFFB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "publicbucket0D82CFFB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "mainsnsC0381B34",
+              },
+            },
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tasksqs12D9B615",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "sqs:SendMessage",
+                "sqs:GetQueueAttributes",
+                "sqs:GetQueueUrl",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "notifysqsEC095A61",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "appsync:GraphQL",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":appsync:ap-northeast-1:101010101010:apis/",
+                    {
+                      "Fn::GetAtt": [
+                        "realtime0CF38FF2",
+                        "ApiId",
+                      ],
+                    },
+                    "/types/Mutation/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaapiServiceRoleDefaultPolicy852237F1",
+        "Roles": [
+          {
+            "Ref": "lambdaapiServiceRole7E4263EE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "lambdaapiSqsEventSourceTestInfraStacknotifysqs3E7CCF8682B43C89": {
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "notifysqsEC095A61",
+            "Arn",
+          ],
+        },
+        "FunctionName": {
+          "Ref": "lambdaapi893CD94E",
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "lambdaapiSqsEventSourceTestInfraStacktasksqsE3E6B075D9265AC4": {
+      "Properties": {
+        "BatchSize": 1,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "tasksqs12D9B615",
+            "Arn",
+          ],
+        },
+        "FunctionName": {
+          "Ref": "lambdaapi893CD94E",
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::EventSourceMapping",
+    },
+    "lambdaapiddbpolicyCE9EA2DA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:dynamodb:ap-northeast-1:101010101010:table/dev-test-*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaapiddbpolicyCE9EA2DA",
+        "Roles": [
+          {
+            "Ref": "lambdaapiServiceRole7E4263EE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "lambdaapissmpolicy9067745F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ssm:GetParameter",
+                "kms:Decrypt",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaapissmpolicy9067745F",
+        "Roles": [
+          {
+            "Ref": "lambdaapiServiceRole7E4263EE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "lambdaeventsfnpolicy5F8059AB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "states:StartExecution",
+                "states:GetExecutionHistory",
+                "states:DescribeExecution",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdaeventsfnpolicy5F8059AB",
+        "Roles": [
+          {
+            "Ref": "lambdaapiServiceRole7E4263EE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "lambdasespolicyC6CB28C8": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ses:SendEmail",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "lambdasespolicyC6CB28C8",
+        "Roles": [
+          {
+            "Ref": "lambdaapiServiceRole7E4263EE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mainapiANYeventproxy80A3496A": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "AWS_IAM",
+        "RouteKey": "ANY /event/{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiANYeventproxymainapilambdaF98465E9": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "mainapiANYeventproxymainapilambdaPermission1B28AC42": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/event/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "mainapiC7DC6378": {
+      "Properties": {
+        "CorsConfiguration": {
+          "AllowCredentials": false,
+          "AllowHeaders": [
+            "*",
+          ],
+          "AllowMethods": [
+            "*",
+          ],
+          "AllowOrigins": [
+            "*",
+          ],
+          "MaxAge": 31536000,
+        },
+        "Description": "HTTP API for Lambda integration",
+        "Name": "dev-test-api",
+        "ProtocolType": "HTTP",
+        "Tags": {
+          "env": "dev",
+          "name": "test",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+    },
+    "mainapiCognitoAuthorizer5A8408CD": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizerType": "JWT",
+        "IdentitySource": [
+          "$request.header.Authorization",
+        ],
+        "JwtConfiguration": {
+          "Audience": [
+            {
+              "Ref": "apigwclientE7D084A5",
+            },
+          ],
+          "Issuer": "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_wdEnqXXXX",
+        },
+        "Name": "CognitoAuthorizer",
+      },
+      "Type": "AWS::ApiGatewayV2::Authorizer",
+    },
+    "mainapiDELETEproxyE859E461": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "DELETE /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiDefaultStageA012029E": {
+      "Properties": {
+        "AccessLogSettings": {
+          "DestinationArn": {
+            "Fn::GetAtt": [
+              "httpapiAccessLogs0179ABB1",
+              "Arn",
+            ],
+          },
+          "Format": "{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","userAgent":"$context.identity.userAgent","sourceIp":"$context.identity.sourceIp","requestTime":"$context.requestTime","requestTimeEpoch":"$context.requestTimeEpoch","httpMethod":"$context.httpMethod","routeKey":"$context.routeKey","path":"$context.path","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength","domainName":"$context.domainName","responseLatency":"$context.responseLatency","integrationLatency":"$context.integrationLatency","username":"$context.authorizer.claims.sub"}",
+        },
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": true,
+        },
+        "StageName": "$default",
+        "Tags": {
+          "env": "dev",
+          "name": "test",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "mainapiGET64CF2802": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "NONE",
+        "RouteKey": "GET /",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiGETecsvpclinkintegration6B4E91E9": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "ConnectionId": {
+          "Ref": "ecsvpclinkEC65F091",
+        },
+        "ConnectionType": "VPC_LINK",
+        "IntegrationMethod": "ANY",
+        "IntegrationType": "HTTP_PROXY",
+        "IntegrationUri": {
+          "Ref": "mainserviceLBPublicListenerBF564B26",
+        },
+        "PayloadFormatVersion": "1.0",
+        "RequestParameters": {
+          "append:header.x-request-id": "$context.extendedRequestId",
+          "append:header.x-source-ip": "$context.identity.sourceIp",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "mainapiGETproxy81BAB755": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "GET /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiHEADproxyA69C7EE3": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "HEAD /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiPATCHproxy3C068B51": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "PATCH /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiPOSTproxy1AEEF7DB": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "POST /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiPUTproxyF7A0BCF5": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "mainapiC7DC6378",
+        },
+        "AuthorizationType": "JWT",
+        "AuthorizerId": {
+          "Ref": "mainapiCognitoAuthorizer5A8408CD",
+        },
+        "RouteKey": "PUT /{proxy+}",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainecrrepo8933DB52": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RepositoryName": "dev-test-api",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::ECR::Repository",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mainlayer908FE5E4": {
+      "Properties": {
+        "CompatibleArchitectures": [
+          "arm64",
+        ],
+        "CompatibleRuntimes": [
+          "nodejs18.x",
+        ],
+        "Content": {
+          "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
+          "S3Key": "9df93f6e18d6547f2b09012f8ce7da4fd19cd065965e51331c627b6cf17f9f9b.zip",
+        },
+        "LayerName": "dev-test-main-layer",
+      },
+      "Type": "AWS::Lambda::LayerVersion",
+    },
+    "mainsecuritygroup0fromTestInfraStackmainserviceLBSecurityGroup1680AAC780B4F25B95": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "FromPort": 80,
+        "GroupId": "sg-06xxxx88ee526f823",
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "mainserviceLBSecurityGroup83118303",
+            "GroupId",
+          ],
+        },
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "mainserviceLB73202B1B": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internal",
+        "SecurityGroups": [
+          {
+            "Fn::GetAtt": [
+              "mainserviceLBSecurityGroup83118303",
+              "GroupId",
+            ],
+          },
+        ],
+        "Subnets": [
+          "p-12345",
+          "p-67890",
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "mainserviceLBPublicListenerBF564B26": {
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "mainserviceLBPublicListenerECSGroupE4607C16",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": {
+          "Ref": "mainserviceLB73202B1B",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "mainserviceLBPublicListenerECSGroupE4607C16": {
+      "Properties": {
+        "Port": 80,
+        "Protocol": "HTTP",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "mainserviceLBSecurityGroup83118303": {
+      "Properties": {
+        "GroupDescription": "Automatically created Security Group for ELB TestInfraStackmainserviceLBB3ABF5FE",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow from anyone on port 80",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "VpcId": "vpc-12345",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "mainserviceLBSecurityGrouptoTestInfraStackmainsecuritygroup0AB65C40680AF8A2606": {
+      "Properties": {
+        "Description": "Load balancer to target",
+        "DestinationSecurityGroupId": "sg-06xxxx88ee526f823",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "mainserviceLBSecurityGroup83118303",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "mainserviceService2B2522D5": {
+      "DependsOn": [
+        "ecsroleDefaultPolicy22BA44C0",
+        "ecsrole00319F80",
+        "mainserviceLBPublicListenerECSGroupE4607C16",
+        "mainserviceLBPublicListenerBF564B26",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "DeploymentCircuitBreaker": {
+            "Enable": true,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DeploymentController": {
+          "Type": "ECS",
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "web",
+            "ContainerPort": 80,
+            "TargetGroupArn": {
+              "Ref": "mainserviceLBPublicListenerECSGroupE4607C16",
+            },
+          },
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              "sg-06xxxx88ee526f823",
+            ],
+            "Subnets": [],
+          },
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TaskDefinition": {
+          "Ref": "mainserviceTaskDef43C90D8C",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "mainserviceServiceTaskCountTargetCpuScaling491BA303": {
+      "DependsOn": [
+        "ecsroleDefaultPolicy22BA44C0",
+        "ecsrole00319F80",
+      ],
+      "Properties": {
+        "PolicyName": "TestInfraStackmainserviceServiceTaskCountTargetCpuScaling73D4F04C",
+        "PolicyType": "TargetTrackingScaling",
+        "ScalingTargetId": {
+          "Ref": "mainserviceServiceTaskCountTargetDF4CD29D",
+        },
+        "TargetTrackingScalingPolicyConfiguration": {
+          "PredefinedMetricSpecification": {
+            "PredefinedMetricType": "ECSServiceAverageCPUUtilization",
+          },
+          "TargetValue": 70,
+        },
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+    },
+    "mainserviceServiceTaskCountTargetDF4CD29D": {
+      "DependsOn": [
+        "ecsroleDefaultPolicy22BA44C0",
+        "ecsrole00319F80",
+      ],
+      "Properties": {
+        "MaxCapacity": 1,
+        "MinCapacity": 1,
+        "ResourceId": {
+          "Fn::Join": [
+            "",
+            [
+              "service/",
+              {
+                "Ref": "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B",
+              },
+              "/",
+              {
+                "Fn::GetAtt": [
+                  "mainserviceService2B2522D5",
+                  "Name",
+                ],
+              },
+            ],
+          ],
+        },
+        "RoleARN": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":iam::101010101010:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
+            ],
+          ],
+        },
+        "ScalableDimension": "ecs:service:DesiredCount",
+        "ServiceNamespace": "ecs",
+      },
+      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+    },
+    "mainserviceTaskDef43C90D8C": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NODE_OPTIONS",
+                "Value": "--enable-source-maps",
+              },
+              {
+                "Name": "TZ",
+                "Value": "Asia/Tokyo",
+              },
+              {
+                "Name": "NODE_ENV",
+                "Value": "dev",
+              },
+              {
+                "Name": "APP_NAME",
+                "Value": "test",
+              },
+              {
+                "Name": "LOG_LEVEL",
+                "Value": "verbose",
+              },
+              {
+                "Name": "EVENT_SOURCE_DISABLED",
+                "Value": "true",
+              },
+              {
+                "Name": "ATTRIBUTE_LIMIT_SIZE",
+                "Value": "389120",
+              },
+              {
+                "Name": "S3_BUCKET_NAME",
+                "Value": {
+                  "Ref": "ddbattributes95C63151",
+                },
+              },
+              {
+                "Name": "SFN_COMMAND_ARN",
+                "Value": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
+              },
+              {
+                "Name": "SNS_TOPIC_ARN",
+                "Value": {
+                  "Ref": "mainsnsC0381B34",
+                },
+              },
+              {
+                "Name": "COGNITO_USER_POOL_ID",
+                "Value": "ap-northeast-1_wdEnqXXXX",
+              },
+              {
+                "Name": "APPSYNC_ENDPOINT",
+                "Value": {
+                  "Fn::GetAtt": [
+                    "realtime0CF38FF2",
+                    "GraphQLUrl",
+                  ],
+                },
+              },
+              {
+                "Name": "SES_FROM_EMAIL",
+                "Value": "noreply@test-domain.xyz",
+              },
+              {
+                "Name": "DATABASE_URL",
+                "Value": "postgresql:///test/rds-account-secret@db.test-domain.xyz/mydbinstance?schema=public",
+              },
+              {
+                "Name": "S3_PUBLIC_BUCKET_NAME",
+                "Value": {
+                  "Ref": "publicbucket0D82CFFB",
+                },
+              },
+              {
+                "Name": "FRONT_BASE_URL",
+                "Value": "https://test.test-domain.xyz",
+              },
+              {
+                "Name": "APP_PORT",
+                "Value": "80",
+              },
+              {
+                "Name": "PRISMA_EXPLICIT_CONNECT",
+                "Value": "false",
+              },
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": "101010101010.dkr.ecr.ap-northeast-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1:7b7dca0b917726f66c4ee736334c494eb2deccdb4ec5d19c1565f800218afd37",
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "mainserviceTaskDefwebLogGroupC5D4DE69",
+                },
+                "awslogs-region": "ap-northeast-1",
+                "awslogs-stream-prefix": "main-service",
+              },
+            },
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 80,
+                "Protocol": "tcp",
+              },
+            ],
+            "Secrets": [
+              {
+                "Name": "DATABASE_USER_PASS",
+                "ValueFrom": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":ssm:ap-northeast-1:101010101010:parameter/test/rds-account-secret",
+                    ],
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "mainserviceTaskDefExecutionRole253DDA42",
+            "Arn",
+          ],
+        },
+        "Family": "TestInfraStackmainserviceTaskDef89B37909",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "ecsrole00319F80",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "mainserviceTaskDefExecutionRole253DDA42": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "mainserviceTaskDefExecutionRoleDefaultPolicy9D26D904": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:ap-northeast-1:101010101010:repository/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1",
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "mainserviceTaskDefwebLogGroupC5D4DE69",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ssm:DescribeParameters",
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ssm:ap-northeast-1:101010101010:parameter/test/rds-account-secret",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mainserviceTaskDefExecutionRoleDefaultPolicy9D26D904",
+        "Roles": [
+          {
+            "Ref": "mainserviceTaskDefExecutionRole253DDA42",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "mainserviceTaskDefwebLogGroupC5D4DE69": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "mainsnsC0381B34": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "TopicName": "dev-test-main-sns",
+      },
+      "Type": "AWS::SNS::Topic",
+    },
+    "mastercommanddecsC637D29D": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "mastercommanddecsCustomResourcePolicyE2063016",
+      ],
+      "Properties": {
+        "Create": "{"service":"DynamoDB","action":"describeTable","parameters":{"TableName":"dev-test-master-command"},"physicalResourceId":{"responsePath":"Table.TableArn"}}",
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "mastercommanddecsCustomResourcePolicyE2063016": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:DescribeTable",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "mastercommanddecsCustomResourcePolicyE2063016",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "notifysqsEC095A61": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "dev-test-notification-queue",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "notifysqsPolicy96E4066E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "mainsnsC0381B34",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "notifysqsEC095A61",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "notifysqsEC095A61",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "notifysqsTestInfraStackmainsnsA010224C9104B89F": {
+      "DependsOn": [
+        "notifysqsPolicy96E4066E",
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "notifysqsEC095A61",
+            "Arn",
+          ],
+        },
+        "FilterPolicy": {
+          "action": [
+            "command-status",
+            "task-status",
+          ],
+        },
+        "Protocol": "sqs",
+        "RawMessageDelivery": true,
+        "TopicArn": {
+          "Ref": "mainsnsC0381B34",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "publicbucket0D82CFFB": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "BucketName": "dev-test-public",
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*",
+              ],
+              "AllowedMethods": [
+                "GET",
+                "PUT",
+                "POST",
+              ],
+              "AllowedOrigins": [
+                "*",
+              ],
+              "MaxAge": 3000,
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "publicbucketOAI56D47DD1": {
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Allows CloudFront to reach the bucket",
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "publicbucketPolicy3A0184E3": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "publicbucket0D82CFFB",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "publicbucketOAI56D47DD1",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "publicbucket0D82CFFB",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "publicbucketdistribution7A24D15F": {
+      "Properties": {
+        "DistributionConfig": {
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD",
+            ],
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "CachedMethods": [
+              "GET",
+              "HEAD",
+            ],
+            "Compress": true,
+            "TargetOriginId": "TestInfraStackpublicbucketdistributionOrigin129EB7A5E",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "publicbucket0D82CFFB",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "TestInfraStackpublicbucketdistributionOrigin129EB7A5E",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "publicbucketOAI56D47DD1",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "PriceClass": "PriceClass_200",
+          "Restrictions": {
+            "GeoRestriction": {
+              "Locations": [
+                "JP",
+                "VN",
+              ],
+              "RestrictionType": "whitelist",
+            },
+          },
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "realtime0CF38FF2": {
+      "Properties": {
+        "AdditionalAuthenticationProviders": [
+          {
+            "AuthenticationType": "AWS_IAM",
+          },
+          {
+            "AuthenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "UserPoolConfig": {
+              "AwsRegion": "ap-northeast-1",
+              "UserPoolId": "ap-northeast-1_wdEnqXXXX",
+            },
+          },
+        ],
+        "AuthenticationType": "API_KEY",
+        "Name": "dev-test-realtime",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+        "XrayEnabled": true,
+      },
+      "Type": "AWS::AppSync::GraphQLApi",
+    },
+    "realtimeDefaultApiKeyBD0EC5CB": {
+      "DependsOn": [
+        "realtimeSchema7B454650",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "realtime0CF38FF2",
+            "ApiId",
+          ],
+        },
+        "Expires": 1762419954,
+      },
+      "Type": "AWS::AppSync::ApiKey",
+    },
+    "realtimeDomainAssociationD479792F": {
+      "DependsOn": [
+        "realtimeDomainName01674B94",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "realtime0CF38FF2",
+            "ApiId",
+          ],
+        },
+        "DomainName": "appsync.test-domain.xyz",
+      },
+      "Type": "AWS::AppSync::DomainNameApiAssociation",
+    },
+    "realtimeDomainName01674B94": {
+      "Properties": {
+        "CertificateArn": "arn:aws:acm:us-east-1:101010101010:certificate/6309f81c-93a7-4b25-b4be-40d86fa89ad7",
+        "Description": {
+          "Fn::Join": [
+            "",
+            [
+              "domain for dev-test-realtime at ",
+              {
+                "Fn::GetAtt": [
+                  "realtime0CF38FF2",
+                  "GraphQLUrl",
+                ],
+              },
+            ],
+          ],
+        },
+        "DomainName": "appsync.test-domain.xyz",
+      },
+      "Type": "AWS::AppSync::DomainName",
+    },
+    "realtimeNoneDataSource2E50F7A6": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "realtime0CF38FF2",
+            "ApiId",
+          ],
+        },
+        "Name": "NoneDataSource",
+        "Type": "NONE",
+      },
+      "Type": "AWS::AppSync::DataSource",
+    },
+    "realtimeSchema7B454650": {
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "realtime0CF38FF2",
+            "ApiId",
+          ],
+        },
+        "Definition": "type Message @aws_api_key @aws_iam @aws_cognito_user_pools @aws_oidc {
+  id: String!
+  table: String!
+  pk: String!
+  sk: String!
+  tenantCode: String!
+  action: String!
+  content: AWSJSON!
+}
+
+type Query {
+  getMessage(id: String!): Message
+}
+
+type Mutation {
+  sendMessage(message: AWSJSON!): Message! @aws_iam
+}
+
+type Subscription {
+  onMessage(tenantCode: String!, action: String, id: String): Message
+    @aws_subscribe(mutations: ["sendMessage"])
+    @aws_api_key
+    @aws_iam
+    @aws_cognito_user_pools
+    @aws_oidc
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+",
+      },
+      "Type": "AWS::AppSync::GraphQLSchema",
+    },
+    "realtimesendMessageResolverA93F264B": {
+      "DependsOn": [
+        "realtimeNoneDataSource2E50F7A6",
+        "realtimeSchema7B454650",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Fn::GetAtt": [
+            "realtime0CF38FF2",
+            "ApiId",
+          ],
+        },
+        "DataSourceName": "NoneDataSource",
+        "FieldName": "sendMessage",
+        "Kind": "UNIT",
+        "RequestMappingTemplate": "{"version": "2018-05-29","payload": $util.toJson($context.arguments.message)}",
+        "ResponseMappingTemplate": "$util.toJson($context.result)",
+        "TypeName": "Mutation",
+      },
+      "Type": "AWS::AppSync::Resolver",
+    },
+    "taskdeadlettersqs91D16094": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "dev-test-task-dead-letter-queue",
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "taskdeadlettersqsPolicy9CAEB195": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "alarmsnsFB7BBC3B",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "taskdeadlettersqs91D16094",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "taskdeadlettersqs91D16094",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "taskdeadlettersqsTestInfraStackalarmsnsB0FD064D9665A5CE": {
+      "DependsOn": [
+        "taskdeadlettersqsPolicy9CAEB195",
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "taskdeadlettersqs91D16094",
+            "Arn",
+          ],
+        },
+        "Protocol": "sqs",
+        "RawMessageDelivery": true,
+        "TopicArn": {
+          "Ref": "alarmsnsFB7BBC3B",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+    "tasksdecs1B0120D7": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "tasksdecsCustomResourcePolicy766680A1",
+      ],
+      "Properties": {
+        "Create": "{"service":"DynamoDB","action":"describeTable","parameters":{"TableName":"dev-test-tasks"},"physicalResourceId":{"responsePath":"Table.TableArn"}}",
+        "InstallLatestAwsSdk": true,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::AWS",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "tasksdecsCustomResourcePolicy766680A1": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "dynamodb:DescribeTable",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "tasksdecsCustomResourcePolicy766680A1",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "tasksqs12D9B615": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "QueueName": "dev-test-task-action-queue",
+        "RedrivePolicy": {
+          "deadLetterTargetArn": {
+            "Fn::GetAtt": [
+              "taskdeadlettersqs91D16094",
+              "Arn",
+            ],
+          },
+          "maxReceiveCount": 5,
+        },
+        "Tags": [
+          {
+            "Key": "env",
+            "Value": "dev",
+          },
+          {
+            "Key": "name",
+            "Value": "test",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::Queue",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "tasksqsPolicyF1D0C5F5": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sqs:SendMessage",
+              "Condition": {
+                "ArnEquals": {
+                  "aws:SourceArn": {
+                    "Ref": "mainsnsC0381B34",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "sns.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::GetAtt": [
+                  "tasksqs12D9B615",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Queues": [
+          {
+            "Ref": "tasksqs12D9B615",
+          },
+        ],
+      },
+      "Type": "AWS::SQS::QueuePolicy",
+    },
+    "tasksqsTestInfraStackmainsnsA010224CA61CC66C": {
+      "DependsOn": [
+        "tasksqsPolicyF1D0C5F5",
+      ],
+      "Properties": {
+        "Endpoint": {
+          "Fn::GetAtt": [
+            "tasksqs12D9B615",
+            "Arn",
+          ],
+        },
+        "FilterPolicy": {
+          "action": [
+            "task-execute",
+          ],
+        },
+        "Protocol": "sqs",
+        "RawMessageDelivery": true,
+        "TopicArn": {
+          "Ref": "mainsnsC0381B34",
+        },
+      },
+      "Type": "AWS::SNS::Subscription",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
