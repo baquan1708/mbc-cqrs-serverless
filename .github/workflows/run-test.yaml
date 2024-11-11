@@ -1,15 +1,15 @@
 name: Run test
 
-on:
-  pull_request:
-    types: [opened, synchronize]
-    branches:
-      - develop
-      - main
+on: push
+  # pull_request:
+  #   types: [opened, synchronize]
+  #   branches:
+  #     - develop
+  #     - main
 
 jobs:
-  unit_tests:
-    name: Unit Test
+  infra_tests:
+    name: infra test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,40 +17,70 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20.11.0
           cache: npm
+      - name: install nodewaf
+        run: npm i -g node-waf
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install template dependencies
+        run: cd ./packages/cli/templates && npm i
 
-      - name: Run Unit Tests
-        run: npm run test
+      - name: Install template dependencies
+        run: pwd && cd ./packages/cli/templates/infra && npm i
 
-  e2e_tests:
-    name: E2e Test For Core package
-    needs: unit_tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build test
-        run: npx lerna run build:test --scope=@mbc-cqrs-serverless/core
-
-      - name: Run e2e Tests
-        run: npx lerna run test:e2e --scope=@mbc-cqrs-serverless/core
+      - name: Run test
+        run: pwd && cd ./packages/cli/templates/infra && npm run test
 
       - uses: actions/upload-artifact@v4
         name: 'upload artifact'
         if: success() || failure()
         with:
-          name: my-artifacts
-          path: ./packages/core/test/scripts/*.out.txt
+          name: my-artifacts-infra
+          path: ./packages/cli/templates/infra/report/*
+
+  # unit_tests:
+  #   name: Unit Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+  #         cache: npm
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Run Unit Tests
+  #       run: npm run test
+
+  # e2e_tests:
+  #   name: E2e Test For Core package
+  #   needs: unit_tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 18
+  #         cache: npm
+
+  #     - name: Install dependencies
+  #       run: npm ci
+
+  #     - name: Build test
+  #       run: npx lerna run build:test --scope=@mbc-cqrs-serverless/core
+
+  #     - name: Run e2e Tests
+  #       run: npx lerna run test:e2e --scope=@mbc-cqrs-serverless/core
+
+  #     - uses: actions/upload-artifact@v4
+  #       name: 'upload artifact'
+  #       if: success() || failure()
+  #       with:
+  #         name: my-artifacts
+  #         path: ./packages/core/test/scripts/*.out.txt

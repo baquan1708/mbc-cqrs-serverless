@@ -419,29 +419,37 @@ export class InfraStack extends cdk.Stack {
       apiIntegration = lambdaIntegration
     } else {
       // ecs api
+      console.log('$@#$@#$@#$@!#$1')
+
       const resp = new Repository(this, 'main-ecr-repo', {
         repositoryName: `${prefix}api`,
         removalPolicy: cdk.RemovalPolicy.RETAIN,
       })
+      console.log('$@#$@#$@#$@!#$2')
 
       const image = new DockerImageAsset(this, 'main-image', {
         directory: path.resolve(__dirname, '../..'),
         platform: Platform.LINUX_AMD64,
         ignoreMode: IgnoreMode.DOCKER,
       })
+      console.log('$@#$@#$@#$@!#$3')
 
       const imageTag = process.env.CODEBUILD_RESOLVED_SOURCE_VERSION
         ? process.env.CODEBUILD_RESOLVED_SOURCE_VERSION.substring(0, 4)
         : 'latest'
 
+        console.log('$@#$@#$@#$@!#$4')
+
       new ECRDeployment(this, `${prefix}deploy`, {
         src: new DockerImageName(image.imageUri),
         dest: new DockerImageName(`${resp.repositoryUri}:${imageTag}`),
       })
+      console.log('$@#$@#$@#$@!#$5')
 
       taskRole = new cdk.aws_iam.Role(this, 'ecs-role', {
         assumedBy: new cdk.aws_iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
       })
+      console.log('$@#$@#$@#$@!#$6')
 
       const ecsService = new ApplicationLoadBalancedFargateService(
         this,
