@@ -73,7 +73,6 @@ function replaceKeyValue(obj: any, desKey: string, desVal: string): any {
 }
 
 test('snapshot test for InfraStack', () => {
-  console.log(cdk.Duration)
   const cdkEnv: cdk.Environment = {
     account: '101010101010',
     region: 'ap-northeast-1',
@@ -109,15 +108,15 @@ test('snapshot test for InfraStack', () => {
     frontBaseUrl: 'https://test.test-domain.xyz',
     fromEmailAddress: 'noreply@test-domain.xyz',
 
-    // ecs: {
-    //   maxInstances: 1,
-    //   minInstances: 1,
-    //   cpu: 512,
-    //   memory: 1024,
-    //   cpuThreshold: 70,
-    //   scaleStep: 1,
-    //   autoRollback: false,
-    // },
+    ecs: {
+      maxInstances: 1,
+      minInstances: 1,
+      cpu: 512,
+      memory: 1024,
+      cpuThreshold: 70,
+      scaleStep: 1,
+      autoRollback: false,
+    },
   }
   const app = new cdk.App()
   const stack = new InfraStack(app, 'TestInfraStack', { env: cdkEnv, config })
