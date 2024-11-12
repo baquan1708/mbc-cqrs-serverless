@@ -74,7 +74,7 @@ exports[`snapshot test for InfraStack 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
-          "S3Key": "ce2f3595a340d6c519a65888ef97e3b9b64f053f83608e32cc28162e22d7d99a.zip",
+          "S3Key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -604,7 +604,7 @@ exports[`snapshot test for InfraStack 1`] = `
         ],
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
-          "S3Key": "d33f5768ee17853962a54eea13d01a3f788c91bb1046106c9bb8e0a5fe52b15c.zip",
+          "S3Key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.zip",
         },
         "Environment": {
           "Variables": {
@@ -1708,7 +1708,7 @@ exports[`snapshot test for InfraStack 1`] = `
         ],
         "Content": {
           "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
-          "S3Key": "9df93f6e18d6547f2b09012f8ce7da4fd19cd065965e51331c627b6cf17f9f9b.zip",
+          "S3Key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.zip",
         },
         "LayerName": "dev-test-main-layer",
       },

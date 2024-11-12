@@ -54,6 +54,24 @@ jest.mock('../config', () => ({
   COGNITO_URL: 'https://cognito-idp.ap-northeast-1.amazonaws.com/',
 }))
 
+function replaceKeyValue(obj: any, desKey: string, desVal: string): any {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj
+  }
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (key === desKey) {
+        obj[key] = desVal
+      } else if (typeof obj[key] === 'object') {
+        obj[key] = replaceKeyValue(obj[key], desKey, desVal)
+      }
+    }
+  }
+
+  return obj
+}
+
 test('snapshot test for InfraStack', () => {
   console.log(cdk.Duration)
   const cdkEnv: cdk.Environment = {
@@ -103,7 +121,12 @@ test('snapshot test for InfraStack', () => {
   }
   const app = new cdk.App()
   const stack = new InfraStack(app, 'TestInfraStack', { env: cdkEnv, config })
-  const template = Template.fromStack(stack).toJSON()
+  let template = Template.fromStack(stack).toJSON()
+  template = replaceKeyValue(
+    template,
+    'S3Key',
+    `${Array(64).fill('x').join('')}.zip`,
+  )
 
   expect(template).toMatchSnapshot()
 })
