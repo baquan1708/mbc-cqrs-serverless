@@ -432,7 +432,7 @@ export class InfraStack extends cdk.Stack {
         platform: Platform.LINUX_AMD64,
         ignoreMode: IgnoreMode.DOCKER,
       })
-      console.log('$@#$@#$@#$@!#$3')
+      console.log('$@#$@#$@#$@!#$3', image)
 
       const imageTag = process.env.CODEBUILD_RESOLVED_SOURCE_VERSION
         ? process.env.CODEBUILD_RESOLVED_SOURCE_VERSION.substring(0, 4)

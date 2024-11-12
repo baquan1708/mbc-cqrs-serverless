@@ -91,15 +91,15 @@ test('snapshot test for InfraStack', () => {
     frontBaseUrl: 'https://test.test-domain.xyz',
     fromEmailAddress: 'noreply@test-domain.xyz',
 
-    ecs: {
-      maxInstances: 1,
-      minInstances: 1,
-      cpu: 512,
-      memory: 1024,
-      cpuThreshold: 70,
-      scaleStep: 1,
-      autoRollback: false,
-    },
+    // ecs: {
+    //   maxInstances: 1,
+    //   minInstances: 1,
+    //   cpu: 512,
+    //   memory: 1024,
+    //   cpuThreshold: 70,
+    //   scaleStep: 1,
+    //   autoRollback: false,
+    // },
   }
   const app = new cdk.App()
   const stack = new InfraStack(app, 'TestInfraStack', { env: cdkEnv, config })

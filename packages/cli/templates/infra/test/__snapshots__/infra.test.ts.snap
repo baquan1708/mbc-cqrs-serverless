@@ -58,30 +58,6 @@ exports[`snapshot test for InfraStack 1`] = `
         ],
       },
     },
-    "mainserviceLoadBalancerDNS4F856933": {
-      "Value": {
-        "Fn::GetAtt": [
-          "mainserviceLB73202B1B",
-          "DNSName",
-        ],
-      },
-    },
-    "mainserviceServiceURL06A5245F": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "http://",
-            {
-              "Fn::GetAtt": [
-                "mainserviceLB73202B1B",
-                "DNSName",
-              ],
-            },
-          ],
-        ],
-      },
-    },
   },
   "Parameters": {
     "BootstrapVersion": {
@@ -179,136 +155,6 @@ exports[`snapshot test for InfraStack 1`] = `
         "Type": "CNAME",
       },
       "Type": "AWS::Route53::RecordSet",
-    },
-    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiB28EAD8E4": {
-      "DependsOn": [
-        "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8",
-        "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": "cdk-hnb659fds-assets-101010101010-ap-northeast-1",
-          "S3Key": "a717c7f64552f4a301aa858b6ff693458c0adbe8dbe22072e1432ecee63aa972.zip",
-        },
-        "Handler": "bootstrap",
-        "MemorySize": 512,
-        "Role": {
-          "Fn::GetAtt": [
-            "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
-            "Arn",
-          ],
-        },
-        "Runtime": "provided.al2023",
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "Timeout": 525600,
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ecr:GetAuthorizationToken",
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:GetRepositoryPolicy",
-                "ecr:DescribeRepositories",
-                "ecr:ListImages",
-                "ecr:DescribeImages",
-                "ecr:BatchGetImage",
-                "ecr:ListTagsForResource",
-                "ecr:DescribeImageScanFindings",
-                "ecr:InitiateLayerUpload",
-                "ecr:UploadLayerPart",
-                "ecr:CompleteLayerUpload",
-                "ecr:PutImage",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRoleDefaultPolicy280095F8",
-        "Roles": [
-          {
-            "Ref": "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiBServiceRole8C8B0491",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B": {
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-      },
-      "Type": "AWS::ECS::Cluster",
     },
     "alarmsnsFB7BBC3B": {
       "Properties": {
@@ -628,376 +474,6 @@ exports[`snapshot test for InfraStack 1`] = `
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
-    },
-    "devtestdeployCustomResource19213233": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DestImage": {
-          "Fn::Join": [
-            "",
-            [
-              "docker://",
-              {
-                "Fn::Select": [
-                  4,
-                  {
-                    "Fn::Split": [
-                      ":",
-                      {
-                        "Fn::GetAtt": [
-                          "mainecrrepo8933DB52",
-                          "Arn",
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-              ".dkr.ecr.",
-              {
-                "Fn::Select": [
-                  3,
-                  {
-                    "Fn::Split": [
-                      ":",
-                      {
-                        "Fn::GetAtt": [
-                          "mainecrrepo8933DB52",
-                          "Arn",
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-              ".",
-              {
-                "Ref": "AWS::URLSuffix",
-              },
-              "/",
-              {
-                "Ref": "mainecrrepo8933DB52",
-              },
-              ":latest",
-            ],
-          ],
-        },
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomCDKECRDeploymentbd07c930edb94112a20f03f096f53666512MiB28EAD8E4",
-            "Arn",
-          ],
-        },
-        "SrcImage": {
-          "Fn::Join": [
-            "",
-            [
-              "docker://",
-              {
-                "Fn::Sub": "101010101010.dkr.ecr.ap-northeast-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1:7b7dca0b917726f66c4ee736334c494eb2deccdb4ec5d19c1565f800218afd37",
-              },
-            ],
-          ],
-        },
-      },
-      "Type": "Custom::CDKBucketDeployment",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "ecsapiddbpolicy10F27BEE": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "dynamodb:PutItem",
-                "dynamodb:UpdateItem",
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:dynamodb:ap-northeast-1:101010101010:table/dev-test-*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ecsapiddbpolicy10F27BEE",
-        "Roles": [
-          {
-            "Ref": "ecsrole00319F80",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ecsapissmpolicy4E5ADCB6": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ssm:GetParameter",
-                "kms:Decrypt",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ecsapissmpolicy4E5ADCB6",
-        "Roles": [
-          {
-            "Ref": "ecsrole00319F80",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ecseventsfnpolicyAF6C20CA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "states:StartExecution",
-                "states:GetExecutionHistory",
-                "states:DescribeExecution",
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ecseventsfnpolicyAF6C20CA",
-        "Roles": [
-          {
-            "Ref": "ecsrole00319F80",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ecsrole00319F80": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "ecsroleDefaultPolicy22BA44C0": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject",
-                "s3:PutObjectLegalHold",
-                "s3:PutObjectRetention",
-                "s3:PutObjectTagging",
-                "s3:PutObjectVersionTagging",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "ddbattributes95C63151",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "ddbattributes95C63151",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject",
-                "s3:PutObjectLegalHold",
-                "s3:PutObjectRetention",
-                "s3:PutObjectTagging",
-                "s3:PutObjectVersionTagging",
-                "s3:Abort*",
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "publicbucket0D82CFFB",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "publicbucket0D82CFFB",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": "sns:Publish",
-              "Effect": "Allow",
-              "Resource": {
-                "Ref": "mainsnsC0381B34",
-              },
-            },
-            {
-              "Action": [
-                "sqs:SendMessage",
-                "sqs:GetQueueAttributes",
-                "sqs:GetQueueUrl",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "tasksqs12D9B615",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": [
-                "sqs:SendMessage",
-                "sqs:GetQueueAttributes",
-                "sqs:GetQueueUrl",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "notifysqsEC095A61",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": "appsync:GraphQL",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":appsync:ap-northeast-1:101010101010:apis/",
-                    {
-                      "Fn::GetAtt": [
-                        "realtime0CF38FF2",
-                        "ApiId",
-                      ],
-                    },
-                    "/types/Mutation/*",
-                  ],
-                ],
-              },
-            },
-            {
-              "Action": [
-                "ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel",
-              ],
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ecsroleDefaultPolicy22BA44C0",
-        "Roles": [
-          {
-            "Ref": "ecsrole00319F80",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ecssespolicy59EE38A5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "ses:SendEmail",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "ecssespolicy59EE38A5",
-        "Roles": [
-          {
-            "Ref": "ecsrole00319F80",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "ecsvpclinkEC65F091": {
-      "Properties": {
-        "Name": "TestInfraStackecsvpclink7D5E2A66",
-        "SecurityGroupIds": [],
-        "SubnetIds": [
-          "p-12345",
-          "p-67890",
-        ],
-        "Tags": {
-          "env": "dev",
-          "name": "test",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::VpcLink",
     },
     "httpapiAccessLogs0179ABB1": {
       "DeletionPolicy": "Retain",
@@ -1844,13 +1320,42 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
         },
       },
       "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiDELETEproxymainapilambdaPermission7153CDD2": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiDefaultStageA012029E": {
       "Properties": {
@@ -1891,7 +1396,7 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
@@ -1899,27 +1404,34 @@ exports[`snapshot test for InfraStack 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Route",
     },
-    "mainapiGETecsvpclinkintegration6B4E91E9": {
+    "mainapiGETmainapilambdaPermissionFB7DDD53": {
       "Properties": {
-        "ApiId": {
-          "Ref": "mainapiC7DC6378",
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
         },
-        "ConnectionId": {
-          "Ref": "ecsvpclinkEC65F091",
-        },
-        "ConnectionType": "VPC_LINK",
-        "IntegrationMethod": "ANY",
-        "IntegrationType": "HTTP_PROXY",
-        "IntegrationUri": {
-          "Ref": "mainserviceLBPublicListenerBF564B26",
-        },
-        "PayloadFormatVersion": "1.0",
-        "RequestParameters": {
-          "append:header.x-request-id": "$context.extendedRequestId",
-          "append:header.x-source-ip": "$context.identity.sourceIp",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/",
+            ],
+          ],
         },
       },
-      "Type": "AWS::ApiGatewayV2::Integration",
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiGETproxy81BAB755": {
       "Properties": {
@@ -1937,13 +1449,42 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
         },
       },
       "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiGETproxymainapilambdaPermission8C294959": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiHEADproxyA69C7EE3": {
       "Properties": {
@@ -1961,13 +1502,42 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
         },
       },
       "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiHEADproxymainapilambdaPermissionE948759F": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiPATCHproxy3C068B51": {
       "Properties": {
@@ -1985,13 +1555,42 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
         },
       },
       "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiPATCHproxymainapilambdaPermission6885C849": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiPOSTproxy1AEEF7DB": {
       "Properties": {
@@ -2009,13 +1608,42 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
         },
       },
       "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "mainapiPOSTproxymainapilambdaPermission3366662E": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
     },
     "mainapiPUTproxyF7A0BCF5": {
       "Properties": {
@@ -2033,7 +1661,7 @@ exports[`snapshot test for InfraStack 1`] = `
             [
               "integrations/",
               {
-                "Ref": "mainapiGETecsvpclinkintegration6B4E91E9",
+                "Ref": "mainapiANYeventproxymainapilambdaF98465E9",
               },
             ],
           ],
@@ -2041,23 +1669,34 @@ exports[`snapshot test for InfraStack 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::Route",
     },
-    "mainecrrepo8933DB52": {
-      "DeletionPolicy": "Retain",
+    "mainapiPUTproxymainapilambdaPermissionC9953BE1": {
       "Properties": {
-        "RepositoryName": "dev-test-api",
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "lambdaapi893CD94E",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:ap-northeast-1:101010101010:",
+              {
+                "Ref": "mainapiC7DC6378",
+              },
+              "/*/*/{proxy+}",
+            ],
+          ],
+        },
       },
-      "Type": "AWS::ECR::Repository",
-      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::Lambda::Permission",
     },
     "mainlayer908FE5E4": {
       "Properties": {
@@ -2074,550 +1713,6 @@ exports[`snapshot test for InfraStack 1`] = `
         "LayerName": "dev-test-main-layer",
       },
       "Type": "AWS::Lambda::LayerVersion",
-    },
-    "mainsecuritygroup0fromTestInfraStackmainserviceLBSecurityGroup1680AAC780B4F25B95": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "FromPort": 80,
-        "GroupId": "sg-06xxxx88ee526f823",
-        "IpProtocol": "tcp",
-        "SourceSecurityGroupId": {
-          "Fn::GetAtt": [
-            "mainserviceLBSecurityGroup83118303",
-            "GroupId",
-          ],
-        },
-        "ToPort": 80,
-      },
-      "Type": "AWS::EC2::SecurityGroupIngress",
-    },
-    "mainserviceLB73202B1B": {
-      "Properties": {
-        "LoadBalancerAttributes": [
-          {
-            "Key": "deletion_protection.enabled",
-            "Value": "false",
-          },
-        ],
-        "Scheme": "internal",
-        "SecurityGroups": [
-          {
-            "Fn::GetAtt": [
-              "mainserviceLBSecurityGroup83118303",
-              "GroupId",
-            ],
-          },
-        ],
-        "Subnets": [
-          "p-12345",
-          "p-67890",
-        ],
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "Type": "application",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
-    },
-    "mainserviceLBPublicListenerBF564B26": {
-      "Properties": {
-        "DefaultActions": [
-          {
-            "TargetGroupArn": {
-              "Ref": "mainserviceLBPublicListenerECSGroupE4607C16",
-            },
-            "Type": "forward",
-          },
-        ],
-        "LoadBalancerArn": {
-          "Ref": "mainserviceLB73202B1B",
-        },
-        "Port": 80,
-        "Protocol": "HTTP",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::Listener",
-    },
-    "mainserviceLBPublicListenerECSGroupE4607C16": {
-      "Properties": {
-        "Port": 80,
-        "Protocol": "HTTP",
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "TargetGroupAttributes": [
-          {
-            "Key": "stickiness.enabled",
-            "Value": "false",
-          },
-        ],
-        "TargetType": "ip",
-        "VpcId": "vpc-12345",
-      },
-      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
-    },
-    "mainserviceLBSecurityGroup83118303": {
-      "Properties": {
-        "GroupDescription": "Automatically created Security Group for ELB TestInfraStackmainserviceLBB3ABF5FE",
-        "SecurityGroupIngress": [
-          {
-            "CidrIp": "0.0.0.0/0",
-            "Description": "Allow from anyone on port 80",
-            "FromPort": 80,
-            "IpProtocol": "tcp",
-            "ToPort": 80,
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "VpcId": "vpc-12345",
-      },
-      "Type": "AWS::EC2::SecurityGroup",
-    },
-    "mainserviceLBSecurityGrouptoTestInfraStackmainsecuritygroup0AB65C40680AF8A2606": {
-      "Properties": {
-        "Description": "Load balancer to target",
-        "DestinationSecurityGroupId": "sg-06xxxx88ee526f823",
-        "FromPort": 80,
-        "GroupId": {
-          "Fn::GetAtt": [
-            "mainserviceLBSecurityGroup83118303",
-            "GroupId",
-          ],
-        },
-        "IpProtocol": "tcp",
-        "ToPort": 80,
-      },
-      "Type": "AWS::EC2::SecurityGroupEgress",
-    },
-    "mainserviceService2B2522D5": {
-      "DependsOn": [
-        "ecsroleDefaultPolicy22BA44C0",
-        "ecsrole00319F80",
-        "mainserviceLBPublicListenerECSGroupE4607C16",
-        "mainserviceLBPublicListenerBF564B26",
-      ],
-      "Properties": {
-        "Cluster": {
-          "Ref": "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B",
-        },
-        "DeploymentConfiguration": {
-          "Alarms": {
-            "AlarmNames": [],
-            "Enable": false,
-            "Rollback": false,
-          },
-          "DeploymentCircuitBreaker": {
-            "Enable": true,
-            "Rollback": false,
-          },
-          "MaximumPercent": 200,
-          "MinimumHealthyPercent": 50,
-        },
-        "DeploymentController": {
-          "Type": "ECS",
-        },
-        "DesiredCount": 1,
-        "EnableECSManagedTags": false,
-        "HealthCheckGracePeriodSeconds": 60,
-        "LaunchType": "FARGATE",
-        "LoadBalancers": [
-          {
-            "ContainerName": "web",
-            "ContainerPort": 80,
-            "TargetGroupArn": {
-              "Ref": "mainserviceLBPublicListenerECSGroupE4607C16",
-            },
-          },
-        ],
-        "NetworkConfiguration": {
-          "AwsvpcConfiguration": {
-            "AssignPublicIp": "DISABLED",
-            "SecurityGroups": [
-              "sg-06xxxx88ee526f823",
-            ],
-            "Subnets": [],
-          },
-        },
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "TaskDefinition": {
-          "Ref": "mainserviceTaskDef43C90D8C",
-        },
-      },
-      "Type": "AWS::ECS::Service",
-    },
-    "mainserviceServiceTaskCountTargetCpuScaling491BA303": {
-      "DependsOn": [
-        "ecsroleDefaultPolicy22BA44C0",
-        "ecsrole00319F80",
-      ],
-      "Properties": {
-        "PolicyName": "TestInfraStackmainserviceServiceTaskCountTargetCpuScaling73D4F04C",
-        "PolicyType": "TargetTrackingScaling",
-        "ScalingTargetId": {
-          "Ref": "mainserviceServiceTaskCountTargetDF4CD29D",
-        },
-        "TargetTrackingScalingPolicyConfiguration": {
-          "PredefinedMetricSpecification": {
-            "PredefinedMetricType": "ECSServiceAverageCPUUtilization",
-          },
-          "TargetValue": 70,
-        },
-      },
-      "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
-    },
-    "mainserviceServiceTaskCountTargetDF4CD29D": {
-      "DependsOn": [
-        "ecsroleDefaultPolicy22BA44C0",
-        "ecsrole00319F80",
-      ],
-      "Properties": {
-        "MaxCapacity": 1,
-        "MinCapacity": 1,
-        "ResourceId": {
-          "Fn::Join": [
-            "",
-            [
-              "service/",
-              {
-                "Ref": "EcsDefaultClusterMnL3mNNYNmainvpc4DEEEA1B",
-              },
-              "/",
-              {
-                "Fn::GetAtt": [
-                  "mainserviceService2B2522D5",
-                  "Name",
-                ],
-              },
-            ],
-          ],
-        },
-        "RoleARN": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":iam::101010101010:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService",
-            ],
-          ],
-        },
-        "ScalableDimension": "ecs:service:DesiredCount",
-        "ServiceNamespace": "ecs",
-      },
-      "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
-    },
-    "mainserviceTaskDef43C90D8C": {
-      "Properties": {
-        "ContainerDefinitions": [
-          {
-            "Environment": [
-              {
-                "Name": "NODE_OPTIONS",
-                "Value": "--enable-source-maps",
-              },
-              {
-                "Name": "TZ",
-                "Value": "Asia/Tokyo",
-              },
-              {
-                "Name": "NODE_ENV",
-                "Value": "dev",
-              },
-              {
-                "Name": "APP_NAME",
-                "Value": "test",
-              },
-              {
-                "Name": "LOG_LEVEL",
-                "Value": "verbose",
-              },
-              {
-                "Name": "EVENT_SOURCE_DISABLED",
-                "Value": "true",
-              },
-              {
-                "Name": "ATTRIBUTE_LIMIT_SIZE",
-                "Value": "389120",
-              },
-              {
-                "Name": "S3_BUCKET_NAME",
-                "Value": {
-                  "Ref": "ddbattributes95C63151",
-                },
-              },
-              {
-                "Name": "SFN_COMMAND_ARN",
-                "Value": "arn:aws:states:ap-northeast-1:101010101010:stateMachine:dev-test-command-handler",
-              },
-              {
-                "Name": "SNS_TOPIC_ARN",
-                "Value": {
-                  "Ref": "mainsnsC0381B34",
-                },
-              },
-              {
-                "Name": "COGNITO_USER_POOL_ID",
-                "Value": "ap-northeast-1_wdEnqXXXX",
-              },
-              {
-                "Name": "APPSYNC_ENDPOINT",
-                "Value": {
-                  "Fn::GetAtt": [
-                    "realtime0CF38FF2",
-                    "GraphQLUrl",
-                  ],
-                },
-              },
-              {
-                "Name": "SES_FROM_EMAIL",
-                "Value": "noreply@test-domain.xyz",
-              },
-              {
-                "Name": "DATABASE_URL",
-                "Value": "postgresql:///test/rds-account-secret@db.test-domain.xyz/mydbinstance?schema=public",
-              },
-              {
-                "Name": "S3_PUBLIC_BUCKET_NAME",
-                "Value": {
-                  "Ref": "publicbucket0D82CFFB",
-                },
-              },
-              {
-                "Name": "FRONT_BASE_URL",
-                "Value": "https://test.test-domain.xyz",
-              },
-              {
-                "Name": "APP_PORT",
-                "Value": "80",
-              },
-              {
-                "Name": "PRISMA_EXPLICIT_CONNECT",
-                "Value": "false",
-              },
-            ],
-            "Essential": true,
-            "Image": {
-              "Fn::Sub": "101010101010.dkr.ecr.ap-northeast-1.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1:7b7dca0b917726f66c4ee736334c494eb2deccdb4ec5d19c1565f800218afd37",
-            },
-            "LogConfiguration": {
-              "LogDriver": "awslogs",
-              "Options": {
-                "awslogs-group": {
-                  "Ref": "mainserviceTaskDefwebLogGroupC5D4DE69",
-                },
-                "awslogs-region": "ap-northeast-1",
-                "awslogs-stream-prefix": "main-service",
-              },
-            },
-            "Name": "web",
-            "PortMappings": [
-              {
-                "ContainerPort": 80,
-                "Protocol": "tcp",
-              },
-            ],
-            "Secrets": [
-              {
-                "Name": "DATABASE_USER_PASS",
-                "ValueFrom": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":ssm:ap-northeast-1:101010101010:parameter/test/rds-account-secret",
-                    ],
-                  ],
-                },
-              },
-            ],
-          },
-        ],
-        "Cpu": "512",
-        "ExecutionRoleArn": {
-          "Fn::GetAtt": [
-            "mainserviceTaskDefExecutionRole253DDA42",
-            "Arn",
-          ],
-        },
-        "Family": "TestInfraStackmainserviceTaskDef89B37909",
-        "Memory": "1024",
-        "NetworkMode": "awsvpc",
-        "RequiresCompatibilities": [
-          "FARGATE",
-        ],
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-        "TaskRoleArn": {
-          "Fn::GetAtt": [
-            "ecsrole00319F80",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ECS::TaskDefinition",
-    },
-    "mainserviceTaskDefExecutionRole253DDA42": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "ecs-tasks.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "mainserviceTaskDefExecutionRoleDefaultPolicy9D26D904": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ecr:BatchCheckLayerAvailability",
-                "ecr:GetDownloadUrlForLayer",
-                "ecr:BatchGetImage",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ecr:ap-northeast-1:101010101010:repository/cdk-hnb659fds-container-assets-101010101010-ap-northeast-1",
-                  ],
-                ],
-              },
-            },
-            {
-              "Action": "ecr:GetAuthorizationToken",
-              "Effect": "Allow",
-              "Resource": "*",
-            },
-            {
-              "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "mainserviceTaskDefwebLogGroupC5D4DE69",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": [
-                "ssm:DescribeParameters",
-                "ssm:GetParameters",
-                "ssm:GetParameter",
-                "ssm:GetParameterHistory",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition",
-                    },
-                    ":ssm:ap-northeast-1:101010101010:parameter/test/rds-account-secret",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "mainserviceTaskDefExecutionRoleDefaultPolicy9D26D904",
-        "Roles": [
-          {
-            "Ref": "mainserviceTaskDefExecutionRole253DDA42",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "mainserviceTaskDefwebLogGroupC5D4DE69": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "Tags": [
-          {
-            "Key": "env",
-            "Value": "dev",
-          },
-          {
-            "Key": "name",
-            "Value": "test",
-          },
-        ],
-      },
-      "Type": "AWS::Logs::LogGroup",
-      "UpdateReplacePolicy": "Retain",
     },
     "mainsnsC0381B34": {
       "Properties": {
