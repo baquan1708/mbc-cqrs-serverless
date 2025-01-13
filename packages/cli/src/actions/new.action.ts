@@ -78,7 +78,7 @@ export default async function newAction(
 
   // npm install
   console.log('Installing packages in', destDir)
-  logs = execSync('npm i', { cwd: destDir })
+  logs = execSync('npm i --registry http://localhost:4873', { cwd: destDir })
   console.log(logs.toString())
 }
 
@@ -88,7 +88,10 @@ function useTemplate(destDir: string) {
       recursive: true,
     })
   } else {
-    execSync('npm i @mbc-cqrs-serverless/cli', { cwd: destDir })
+    execSync(
+      'npm i @mbc-cqrs-serverless/cli --registry http://localhost:4873',
+      { cwd: destDir },
+    )
     cpSync(
       path.join(destDir, 'node_modules/@mbc-cqrs-serverless/cli/templates'),
       destDir,
@@ -133,14 +136,18 @@ function usePackageVersion(
 
 function getPackageVersion(packageName: string, isLatest = false): string[] {
   if (isLatest) {
-    const latestVersion = execSync(`npm view ${packageName} dist-tags.latest`)
+    const latestVersion = execSync(
+      `npm view ${packageName} dist-tags.latest --registry http://localhost:4873`,
+    )
       .toString()
       .trim()
     return [latestVersion]
   }
 
   const versions = JSON.parse(
-    execSync(`npm view ${packageName} versions --json`).toString(),
+    execSync(
+      `npm view ${packageName} versions --json --registry http://localhost:4873`,
+    ).toString(),
   ) as string[]
   return versions
 }
