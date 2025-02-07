@@ -136,6 +136,11 @@ export class TaskQueueEventHandler
           taskStatus,
           TaskStatusEnum.PROCESSING,
         )
+        this.logger.log(
+          'compareaaaaa',
+          taskStatus.subTaskSucceedCount + taskStatus.subTaskFailedCount ===
+            taskStatus.subTaskCount,
+        )
         if (
           taskStatus.subTaskSucceedCount + taskStatus.subTaskFailedCount ===
           taskStatus.subTaskCount
