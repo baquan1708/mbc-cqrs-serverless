@@ -2,13 +2,17 @@ import {
   EventBus,
   EventHandler,
   IEventHandler,
+  StepFunctionService,
 } from '@mbc-cqrs-serverless/core'
 import { Inject, Logger, OnModuleInit } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { ModuleRef } from '@nestjs/core'
 
+import { TaskEntity } from '../entity'
 import { TaskStatusEnum } from '../enums/status.enum'
 import { TASK_QUEUE_EVENT_FACTORY } from '../task.module-definition'
 import { TaskService } from '../task.service'
+import { sleep } from '../utils'
 import { TaskQueueEvent } from './task.queue.event'
 import { ITaskQueueEventFactory } from './task.queue.event-factory.interface'
 
@@ -19,13 +23,18 @@ export class TaskQueueEventHandler
   private readonly logger = new Logger(TaskQueueEventHandler.name)
   // We can not inject event module here because of event source can be disabled
   private eventBus: EventBus
+  private readonly sfnTaskArn: string
 
   constructor(
     private readonly moduleRef: ModuleRef,
     private readonly taskService: TaskService,
     @Inject(TASK_QUEUE_EVENT_FACTORY)
     private readonly eventFactory: ITaskQueueEventFactory,
-  ) {}
+    private readonly configService: ConfigService,
+    private readonly sfnService: StepFunctionService,
+  ) {
+    this.sfnTaskArn = this.configService.get<string>('SFN_TASK_ARN', '')
+  }
 
   onModuleInit() {
     const enableEventSourceModule = process.env.EVENT_SOURCE_DISABLED !== 'true'
@@ -37,6 +46,14 @@ export class TaskQueueEventHandler
   async execute(event: TaskQueueEvent): Promise<any> {
     this.logger.debug('task queue event executing::', event)
 
+    if (event.taskEvent.taskKey.pk.startsWith('SFN_TASK')) {
+      this.handleStepFunctionTask(event)
+    } else {
+      this.handleTask(event)
+    }
+  }
+
+  async handleTask(event: TaskQueueEvent): Promise<any> {
     const taskKey = event.taskEvent.taskKey
     this.logger.debug('task key: ', taskKey)
 
@@ -61,5 +78,124 @@ export class TaskQueueEventHandler
       ])
       throw error
     }
+  }
+
+  async handleStepFunctionTask(event: TaskQueueEvent): Promise<any> {
+    const taskKey = event.taskEvent.taskKey
+    this.logger.debug('step function task key: ', taskKey)
+
+    try {
+      await this.taskService.updateStepFunctionTask(
+        taskKey,
+        {},
+        TaskStatusEnum.PROCESSING,
+      )
+
+      const subTasks = await this.taskService.createSubTask(event)
+
+      await this.taskService.updateStepFunctionTask(
+        event.taskEvent.taskKey,
+        {
+          subTaskCount: subTasks.length,
+          subTaskSucceedCount: 0,
+          subTaskFailedCount: 0,
+          subTaskRunningCount: 0,
+          subTasks: subTasks.map((subTask) => ({
+            pk: subTask.pk,
+            sk: subTask.sk,
+            status: subTask.status,
+          })),
+        },
+        TaskStatusEnum.PROCESSING,
+      )
+
+      const ddbKey = event.taskEvent.taskKey
+      const ddbRecordId = `${ddbKey.pk || 'pk'}-${ddbKey.sk || 'sk'}`
+        .replaceAll('#', '-')
+        .replace('@', '-v')
+        .replace(
+          /[^0-9A-Za-z_-]+/g,
+          `__${Math.random().toString(36).substring(2, 4)}__`,
+        )
+
+      const sfnExecName = `${ddbRecordId}-${Date.now()}`
+
+      await this.sfnService.startExecution(
+        this.sfnTaskArn,
+        subTasks,
+        sfnExecName,
+      )
+
+      // interval check
+      while (true) {
+        await sleep(15000)
+        const taskStatus = await this.formatTaskStatus(subTasks)
+        this.logger.debug('aaaaaaaaaaaaaaaaaaaaaaaatask status', taskStatus)
+        await this.taskService.updateStepFunctionTask(
+          taskKey,
+          taskStatus,
+          TaskStatusEnum.PROCESSING,
+        )
+        if (
+          taskStatus.subTaskSucceedCount + taskStatus.subTaskFailedCount ===
+          taskStatus.subTaskCount
+        ) {
+          this.logger.debug('aaaaaaaaaaaaaaaaaaaaaaaintask status', taskStatus)
+
+          break
+        }
+      }
+      // update status completed
+      await this.taskService.updateStepFunctionTask(
+        taskKey,
+        undefined,
+        TaskStatusEnum.COMPLETED,
+      )
+    } catch (error) {
+      // update status failed
+      this.logger.error(error)
+      await Promise.all([
+        this.taskService.updateStatus(taskKey, TaskStatusEnum.FAILED, {
+          error: (error as Error).stack,
+        }),
+        this.taskService.publishAlarm(event, (error as Error).stack),
+      ])
+      throw error
+    }
+  }
+
+  private async formatTaskStatus(originTasks: TaskEntity[]) {
+    const tasks = await Promise.all(
+      originTasks.map((task) =>
+        this.taskService.getTask({
+          pk: task.pk,
+          sk: task.sk,
+        }),
+      ),
+    )
+
+    const result = {
+      subTaskCount: originTasks.length,
+      subTaskSucceedCount: this.countTaskStatus(
+        tasks,
+        TaskStatusEnum.COMPLETED,
+      ),
+      subTaskFailedCount: this.countTaskStatus(tasks, TaskStatusEnum.FAILED),
+      subTaskRunningCount: this.countTaskStatus(
+        tasks,
+        TaskStatusEnum.PROCESSING,
+      ),
+      subTasks: tasks.map((task) => ({
+        pk: task.pk,
+        sk: task.sk,
+        status: task.status,
+      })),
+    }
+
+    return result
+  }
+
+  private countTaskStatus(tasks: TaskEntity[], status: TaskStatusEnum) {
+    return tasks.filter((task) => task.status === status).length
   }
 }
