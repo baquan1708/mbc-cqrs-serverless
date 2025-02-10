@@ -8,11 +8,9 @@ import { Inject, Logger, OnModuleInit } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ModuleRef } from '@nestjs/core'
 
-import { TaskEntity } from '../entity'
 import { TaskStatusEnum } from '../enums/status.enum'
 import { TASK_QUEUE_EVENT_FACTORY } from '../task.module-definition'
 import { TaskService } from '../task.service'
-import { sleep } from '../utils'
 import { TaskQueueEvent } from './task.queue.event'
 import { ITaskQueueEventFactory } from './task.queue.event-factory.interface'
 
@@ -125,37 +123,6 @@ export class TaskQueueEventHandler
         subTasks,
         sfnExecName,
       )
-
-      // interval check
-      while (true) {
-        await sleep(15000)
-        const taskStatus = await this.formatTaskStatus(subTasks)
-        this.logger.debug('aaaaaaaaaaaaaaaaaaaaaaaatask status', taskStatus)
-        await this.taskService.updateStepFunctionTask(
-          taskKey,
-          taskStatus,
-          TaskStatusEnum.PROCESSING,
-        )
-        this.logger.log(
-          'compareaaaaa',
-          taskStatus.subTaskSucceedCount + taskStatus.subTaskFailedCount ===
-            taskStatus.subTaskCount,
-        )
-        if (
-          taskStatus.subTaskSucceedCount + taskStatus.subTaskFailedCount ===
-          taskStatus.subTaskCount
-        ) {
-          this.logger.debug('aaaaaaaaaaaaaaaaaaaaaaaintask status', taskStatus)
-
-          break
-        }
-      }
-      // update status completed
-      await this.taskService.updateStepFunctionTask(
-        taskKey,
-        undefined,
-        TaskStatusEnum.COMPLETED,
-      )
     } catch (error) {
       // update status failed
       this.logger.error(error)
@@ -167,40 +134,5 @@ export class TaskQueueEventHandler
       ])
       throw error
     }
-  }
-
-  private async formatTaskStatus(originTasks: TaskEntity[]) {
-    const tasks = await Promise.all(
-      originTasks.map((task) =>
-        this.taskService.getTask({
-          pk: task.pk,
-          sk: task.sk,
-        }),
-      ),
-    )
-
-    const result = {
-      subTaskCount: originTasks.length,
-      subTaskSucceedCount: this.countTaskStatus(
-        tasks,
-        TaskStatusEnum.COMPLETED,
-      ),
-      subTaskFailedCount: this.countTaskStatus(tasks, TaskStatusEnum.FAILED),
-      subTaskRunningCount: this.countTaskStatus(
-        tasks,
-        TaskStatusEnum.PROCESSING,
-      ),
-      subTasks: tasks.map((task) => ({
-        pk: task.pk,
-        sk: task.sk,
-        status: task.status,
-      })),
-    }
-
-    return result
-  }
-
-  private countTaskStatus(tasks: TaskEntity[], status: TaskStatusEnum) {
-    return tasks.filter((task) => task.status === status).length
   }
 }

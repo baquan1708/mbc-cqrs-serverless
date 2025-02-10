@@ -1,5 +1,3 @@
-import { AttributeValue } from '@aws-sdk/client-dynamodb'
-import { unmarshall } from '@aws-sdk/util-dynamodb'
 import {
   DetailKey,
   IEvent,
@@ -22,7 +20,6 @@ export class StepFunctionTaskEvent implements IEvent {
   taskToken?: string
 
   constructor(event?: Partial<StepFunctionTaskEvent>) {
-    console.log('!@#!@#!@#', event)
     Object.assign(this, event)
     if (event?.context) {
       this.source = event.context.StateMachine.Id

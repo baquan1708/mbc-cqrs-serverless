@@ -1,6 +1,7 @@
 import { DataStoreModule, QueueModule } from '@mbc-cqrs-serverless/core'
 import { DynamicModule, Module } from '@nestjs/common'
 
+import { SubTaskQueueEventHandler } from './event/sub-task.queue.event.handler'
 import { TaskEventHandler } from './event/task.event.handler'
 import { TaskQueueEventHandler } from './event/task.queue.event.handler'
 import { TaskSfnEventHandler } from './event/task.sfn.event.handler'
@@ -19,6 +20,7 @@ import { TaskService } from './task.service'
     TaskEventHandler,
     TaskQueueEventHandler,
     TaskSfnEventHandler,
+    SubTaskQueueEventHandler,
   ],
   exports: [TaskService],
 })

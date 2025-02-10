@@ -47,14 +47,18 @@ export class TaskSfnEventHandler
         events.map((event) => this.eventBus.execute(event)),
       )
       // update status completed
-      await this.taskService.updateStatus(taskKey, TaskStatusEnum.COMPLETED, {
-        result,
-      })
+      await this.taskService.updateSubTaskStatus(
+        taskKey,
+        TaskStatusEnum.COMPLETED,
+        {
+          result,
+        },
+      )
     } catch (error) {
       // update status failed
       this.logger.error(error)
       await Promise.all([
-        this.taskService.updateStatus(taskKey, TaskStatusEnum.FAILED, {
+        this.taskService.updateSubTaskStatus(taskKey, TaskStatusEnum.FAILED, {
           error: (error as Error).stack,
         }),
         this.taskService.publishAlarm(event, (error as Error).stack),

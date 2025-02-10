@@ -147,6 +147,25 @@ export class TaskService {
     return subTasks
   }
 
+  async getAllSubTask(subTask: DetailKey): Promise<[TaskEntity]> {
+    const parentKey = subTask.sk
+      .split(KEY_SEPARATOR)
+      .slice(0, -1)
+      .join(KEY_SEPARATOR)
+    const res = await this.dynamoDbService.listItemsByPk(
+      this.tableName,
+      subTask.pk,
+      {
+        skExpession: 'begins_with(sk, :typeCode)',
+        skAttributeValues: {
+          ':typeCode': `${parentKey}${KEY_SEPARATOR}`,
+        },
+      },
+    )
+
+    return (res?.items || []).map((item) => new TaskEntity(item))
+  }
+
   async updateStepFunctionTask(
     key: DetailKey,
     attributes?: Record<string, any>,
@@ -186,6 +205,27 @@ export class TaskService {
     // notification via SNS
     await this.snsService.publish<INotification>({
       action: 'task-status',
+      ...key,
+      table: this.tableName,
+      id: notifyId || `${key.pk}#${key.sk}`,
+      tenantCode: key.pk.substring(key.pk.indexOf('#') + 1),
+      content: { status, attributes },
+    })
+  }
+
+  async updateSubTaskStatus(
+    key: DetailKey,
+    status: string,
+    attributes?: { result?: any; error?: any },
+    notifyId?: string,
+  ) {
+    await this.dynamoDbService.updateItem(this.tableName, key, {
+      set: { status, attributes },
+    })
+
+    // notification via SNS -> insert to queue
+    await this.snsService.publish<INotification>({
+      action: 'sub-task-status',
       ...key,
       table: this.tableName,
       id: notifyId || `${key.pk}#${key.sk}`,
@@ -246,5 +286,40 @@ export class TaskService {
     }
     this.logger.error('alarm:::', alarm)
     await this.snsService.publish<INotification>(alarm, this.alarmTopicArn)
+  }
+
+  async formatTaskStatus(originTasks: TaskEntity[]) {
+    const tasks = await Promise.all(
+      originTasks.map((task) =>
+        this.getTask({
+          pk: task.pk,
+          sk: task.sk,
+        }),
+      ),
+    )
+
+    const result = {
+      subTaskCount: originTasks.length,
+      subTaskSucceedCount: this.countTaskStatus(
+        tasks,
+        TaskStatusEnum.COMPLETED,
+      ),
+      subTaskFailedCount: this.countTaskStatus(tasks, TaskStatusEnum.FAILED),
+      subTaskRunningCount: this.countTaskStatus(
+        tasks,
+        TaskStatusEnum.PROCESSING,
+      ),
+      subTasks: tasks.map((task) => ({
+        pk: task.pk,
+        sk: task.sk,
+        status: task.status,
+      })),
+    }
+
+    return result
+  }
+
+  private countTaskStatus(tasks: TaskEntity[], status: TaskStatusEnum) {
+    return tasks.filter((task) => task.status === status).length
   }
 }
