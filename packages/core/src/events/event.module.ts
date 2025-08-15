@@ -22,14 +22,20 @@ export class EventModule implements OnApplicationBootstrap {
 
   onApplicationBootstrap() {
     const { events, eventFactorys } = this.explorerService.explore()
+
     if (events && events.length) {
-      // this.logger.debug('register events')
+      this.logger.debug(`Registering ${events.length} event handlers...`)
       this.eventBus.register(events)
     }
 
     if (eventFactorys && eventFactorys.length) {
-      // this.logger.debug('register event factorys')
-      this.eventService.eventFactory = new eventFactorys[0]()
+      this.logger.debug(
+        `Registering ${eventFactorys.length} event factories...`,
+      )
+
+      const factoryInstances = eventFactorys.map((Factory) => new Factory())
+
+      this.eventService.eventFactory = factoryInstances
     }
   }
 }
