@@ -1,3 +1,5 @@
+export * from './abstract-event-factory'
+export * from './core-event-factory'
 export * from './default-event-factory'
 export * from './event.controller'
 export * from './event.module'
