@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.75-beta.0](https://github.com/mbc-net/mbc-cqrs-serverless/compare/v0.1.12-beta.0...v0.1.75-beta.0) (2025-09-11)
+
+### Bug Fixes
+
+- correct description text ([2a0c8bf](https://github.com/mbc-net/mbc-cqrs-serverless/commit/2a0c8bf5dd14d41f4853014ce934ebeb5cca2b52))
+
+### Features
+
+- add logger ([c8fdcc6](https://github.com/mbc-net/mbc-cqrs-serverless/commit/c8fdcc65f88407cb5b0d636200cc8713974a42f7))
+- add queue and sfn for task ([5eb1ec9](https://github.com/mbc-net/mbc-cqrs-serverless/commit/5eb1ec978d3a6a87d6ad8d7cd6467fdc0200bc52))
+- add schematic description ([0c7ffbd](https://github.com/mbc-net/mbc-cqrs-serverless/commit/0c7ffbdd9a287f471ac7020a7d485a3d04df2351))
+- add schematic for generating controllers ([3dc7df2](https://github.com/mbc-net/mbc-cqrs-serverless/commit/3dc7df2f4a91b7cbfcfe7a18169a282d5fcccbe4))
+- add schematic for generating dto, service, entity ([89df08d](https://github.com/mbc-net/mbc-cqrs-serverless/commit/89df08d71824c99071013b98c9fc4198d6a9dc6a))
+- add schematic for generating module ([97cdc31](https://github.com/mbc-net/mbc-cqrs-serverless/commit/97cdc313265162411d84c3b3b1e2b858bd38d423))
+- CLI package comprehensive test enhancement ([edd8426](https://github.com/mbc-net/mbc-cqrs-serverless/commit/edd842662d90f5c1609cde332456489cd6f80062))
+- update infra for import module ([d2f609d](https://github.com/mbc-net/mbc-cqrs-serverless/commit/d2f609d2b4dea9a0265310461617a8a9d46d5d15))
+- update infra local for import module ([9c52603](https://github.com/mbc-net/mbc-cqrs-serverless/commit/9c526035bf630a708329539832a80739cda1ed85))
+- update template to use node 20 runtime ([edeaf00](https://github.com/mbc-net/mbc-cqrs-serverless/commit/edeaf00459db3a9e41b57cae8f8a0cda00540c80))
+
 ## [0.1.74-beta.0](https://github.com/mbc-net/mbc-cqrs-serverless/compare/v0.1.73-beta.0...v0.1.74-beta.0) (2025-08-25)
 
 ### Features
