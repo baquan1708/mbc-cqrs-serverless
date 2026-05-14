@@ -7,45 +7,59 @@ import { AppSyncService } from '../appsync.service'
 import { AppSyncEventsService } from '../appsync-events.service'
 import { NotificationEvent } from './notification.event'
 
+export const TRANSPORT_APPSYNC_GRAPHQL = 'appsync-graphql'
+export const TRANSPORT_APPSYNC_EVENT = 'appsync-event'
+
 @EventHandler(NotificationEvent)
 export class NotificationEventHandler
   implements IEventHandler<NotificationEvent>
 {
   private readonly logger = new Logger(NotificationEventHandler.name)
-  private readonly useAppsyncEvents: boolean
 
   constructor(
     private readonly appSyncService: AppSyncService,
     private readonly appSyncEventsService: AppSyncEventsService,
     private readonly config: ConfigService,
-  ) {
-    // Opt-in via APPSYNC_EVENTS_ENABLED=true
-    // When enabled, publishes to AppSync Events API (HTTP pub/sub, no GraphQL schema needed).
-    // When APPSYNC_ENDPOINT is also set, dual-publishes to both during migration.
-    // Once migration is complete, unset APPSYNC_ENDPOINT to use Events API only.
-    this.useAppsyncEvents =
-      this.config.get<boolean>('APPSYNC_EVENTS_ENABLED') === true
+  ) {}
+
+  async execute(event: NotificationEvent): Promise<void> {
+    const body: INotification = JSON.parse(event.body)
+    const transports = this.resolveTransports()
+
+    this.logger.debug(`execute:: transports=[${transports.join(', ')}]`)
+
+    await Promise.all(
+      transports.map((name) => {
+        switch (name) {
+          case TRANSPORT_APPSYNC_GRAPHQL:
+            return this.appSyncService.sendMessage(body)
+          case TRANSPORT_APPSYNC_EVENT:
+            return this.appSyncEventsService.sendMessage(body)
+          default:
+            this.logger.warn(`Unknown transport "${name}", skipping`)
+            return Promise.resolve()
+        }
+      }),
+    )
   }
 
-  async execute(event: NotificationEvent): Promise<any> {
-    this.logger.debug('notification event executing:: ', event)
-    const body: INotification = JSON.parse(event.body)
-
-    if (this.useAppsyncEvents) {
-      const tasks: Promise<any>[] = [
-        this.appSyncEventsService.publishEvent(body),
-      ]
-
-      // Dual-publish: also send to the old AppSync Subscription if endpoint is still configured.
-      // Remove APPSYNC_ENDPOINT once all clients have migrated to the Events API.
-      if (this.config.get<string>('APPSYNC_ENDPOINT')) {
-        tasks.push(this.appSyncService.sendMessage(body))
-      }
-
-      return Promise.allSettled(tasks)
-    }
-
-    // Default: existing AppSync Subscription (GraphQL mutation)
-    return this.appSyncService.sendMessage(body)
+  /**
+   * Reads NOTIFICATION_TRANSPORTS at call time (not constructor) to avoid
+   * Lambda cold-start caching issues.
+   *
+   * Defaults to ['appsync-graphql'] when not set — fully backward compatible.
+   *
+   * Examples:
+   *   NOTIFICATION_TRANSPORTS=appsync-graphql
+   *   NOTIFICATION_TRANSPORTS=appsync-event
+   *   NOTIFICATION_TRANSPORTS=appsync-graphql,appsync-event
+   */
+  private resolveTransports(): string[] {
+    const raw = this.config.get<string>('NOTIFICATION_TRANSPORTS') ?? ''
+    const list = raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    return list.length ? list : [TRANSPORT_APPSYNC_GRAPHQL]
   }
 }

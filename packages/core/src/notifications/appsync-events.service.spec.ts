@@ -10,9 +10,7 @@ jest.mock('node-fetch', () => jest.fn())
 const MOCK_ENDPOINT =
   'https://test.appsync-api.ap-northeast-1.amazonaws.com/event'
 const MOCK_HOSTNAME = 'test.appsync-api.ap-northeast-1.amazonaws.com'
-const MOCK_API_KEY = 'test-api-key'
 const MOCK_NAMESPACE = 'default'
-const MOCK_REGION = 'ap-northeast-1'
 
 const mockNotification: INotification = {
   id: 'user-tenant#TEST#MBC#publish-sync#data@5',
@@ -27,8 +25,6 @@ const mockNotification: INotification = {
 function makeConfigService(overrides: Record<string, string | undefined> = {}) {
   const defaults: Record<string, string | undefined> = {
     APPSYNC_EVENTS_ENDPOINT: MOCK_ENDPOINT,
-    APPSYNC_EVENTS_API_KEY: MOCK_API_KEY,
-    APPSYNC_EVENTS_REGION: MOCK_REGION,
     APPSYNC_EVENTS_NAMESPACE: MOCK_NAMESPACE,
     ...overrides,
   }
@@ -42,6 +38,10 @@ describe('AppSyncEventsService', () => {
   let mockFetch: jest.MockedFunction<any>
 
   beforeEach(async () => {
+    process.env.AWS_ACCESS_KEY_ID = 'test-key'
+    process.env.AWS_SECRET_ACCESS_KEY = 'test-secret'
+    process.env.AWS_REGION = 'ap-northeast-1'
+
     mockFetch = require('node-fetch')
     mockFetch.mockResolvedValue({ ok: true })
 
@@ -57,6 +57,9 @@ describe('AppSyncEventsService', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+    delete process.env.AWS_ACCESS_KEY_ID
+    delete process.env.AWS_SECRET_ACCESS_KEY
+    delete process.env.AWS_REGION
   })
 
   it('should be defined', () => {
@@ -67,9 +70,7 @@ describe('AppSyncEventsService', () => {
   // resolveChannel
   // ---------------------------------------------------------------------------
   describe('resolveChannel', () => {
-    it('should build correct channel path sanitizing # and @ from id', () => {
-      // id = 'user-tenant#TEST#MBC#publish-sync#data@5'
-      // sanitizeSegment replaces non-alphanumeric with '-' then trims leading/trailing dashes
+    it('should build correct channel sanitizing # and @ from id', () => {
       const channel = service.resolveChannel(mockNotification)
       expect(channel).toBe(
         '/default/MBC/user-tenant/command-status/user-tenant-TEST-MBC-publish-sync-data-5',
@@ -81,7 +82,6 @@ describe('AppSyncEventsService', () => {
         ...mockNotification,
         tenantCode: 'tenant_code/extra',
       })
-      // underscores and slash → dashes
       expect(channel).toContain('tenant-code-extra')
     })
 
@@ -90,9 +90,11 @@ describe('AppSyncEventsService', () => {
         ...mockNotification,
         action: '#command-status#',
       })
-      // leading and trailing # → '-', then stripped
-      expect(channel).not.toMatch(/\/-[^/]/)
-      expect(channel).not.toMatch(/[^/]-\//)
+      const segments = channel.split('/')
+      segments.forEach((seg) => {
+        expect(seg).not.toMatch(/^-/)
+        expect(seg).not.toMatch(/-$/)
+      })
     })
 
     it('should truncate segment to 50 characters', () => {
@@ -106,7 +108,7 @@ describe('AppSyncEventsService', () => {
       expect(idSegment.length).toBeLessThanOrEqual(50)
     })
 
-    it('should fall back to "none" for empty/undefined segment', () => {
+    it('should fall back to "none" for empty segment', () => {
       const channel = service.resolveChannel({ ...mockNotification, table: '' })
       expect(channel).toContain('/none/')
     })
@@ -145,19 +147,17 @@ describe('AppSyncEventsService', () => {
   })
 
   // ---------------------------------------------------------------------------
-  // publishEvent
+  // sendMessage
   // ---------------------------------------------------------------------------
-  describe('publishEvent', () => {
-    it('should POST to endpoint URL with API key auth', async () => {
-      await service.publishEvent(mockNotification)
+  describe('sendMessage', () => {
+    it('should POST to endpoint using IAM SigV4 auth', async () => {
+      await service.sendMessage(mockNotification)
 
       expect(mockFetch).toHaveBeenCalledWith(
         MOCK_ENDPOINT,
         expect.objectContaining({
           method: 'POST',
           headers: expect.objectContaining({
-            'Content-Type': 'application/json',
-            'x-api-key': MOCK_API_KEY,
             host: MOCK_HOSTNAME,
           }),
         }),
@@ -165,7 +165,7 @@ describe('AppSyncEventsService', () => {
     })
 
     it('should include channel and events array in request body', async () => {
-      await service.publishEvent(mockNotification)
+      await service.sendMessage(mockNotification)
 
       const callArgs = mockFetch.mock.calls[0]
       const body = JSON.parse(callArgs[1].body)
@@ -175,6 +175,13 @@ describe('AppSyncEventsService', () => {
       expect(body).toHaveProperty('events')
       expect(body.events).toHaveLength(1)
       expect(JSON.parse(body.events[0])).toMatchObject(mockNotification)
+    })
+
+    it('should use IAM SigV4 — no x-api-key header', async () => {
+      await service.sendMessage(mockNotification)
+
+      const callArgs = mockFetch.mock.calls[0]
+      expect(callArgs[1].headers).not.toHaveProperty('x-api-key')
     })
 
     it('should skip publish and not throw when endpoint is not configured', async () => {
@@ -189,44 +196,11 @@ describe('AppSyncEventsService', () => {
       }).compile()
       const svc = module.get<AppSyncEventsService>(AppSyncEventsService)
 
-      await expect(svc.publishEvent(mockNotification)).resolves.toBeUndefined()
+      await expect(svc.sendMessage(mockNotification)).resolves.toBeUndefined()
       expect(mockFetch).not.toHaveBeenCalled()
     })
 
-    it('should use IAM SigV4 auth when no API key is configured', async () => {
-      process.env.AWS_ACCESS_KEY_ID = 'test-access-key'
-      process.env.AWS_SECRET_ACCESS_KEY = 'test-secret-key'
-      process.env.AWS_REGION = MOCK_REGION
-
-      const module = await Test.createTestingModule({
-        providers: [
-          AppSyncEventsService,
-          {
-            provide: ConfigService,
-            useValue: makeConfigService({ APPSYNC_EVENTS_API_KEY: undefined }),
-          },
-        ],
-      }).compile()
-      const svc = module.get<AppSyncEventsService>(AppSyncEventsService)
-
-      await svc.publishEvent(mockNotification)
-
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.objectContaining({
-          method: 'POST',
-          headers: expect.not.objectContaining({
-            'x-api-key': expect.any(String),
-          }),
-        }),
-      )
-
-      delete process.env.AWS_ACCESS_KEY_ID
-      delete process.env.AWS_SECRET_ACCESS_KEY
-      delete process.env.AWS_REGION
-    })
-
-    it('should throw when the HTTP response is not ok', async () => {
+    it('should throw when HTTP response is not ok', async () => {
       mockFetch.mockResolvedValue({
         ok: false,
         status: 400,
@@ -237,7 +211,7 @@ describe('AppSyncEventsService', () => {
           ),
       })
 
-      await expect(service.publishEvent(mockNotification)).rejects.toThrow(
+      await expect(service.sendMessage(mockNotification)).rejects.toThrow(
         'AppSync Events publish failed [400]',
       )
     })
@@ -245,7 +219,7 @@ describe('AppSyncEventsService', () => {
     it('should throw on network error', async () => {
       mockFetch.mockRejectedValue(new Error('Network error'))
 
-      await expect(service.publishEvent(mockNotification)).rejects.toThrow(
+      await expect(service.sendMessage(mockNotification)).rejects.toThrow(
         'Network error',
       )
     })
@@ -260,25 +234,7 @@ describe('AppSyncEventsService', () => {
       expect((service as any).hostname).toBe(MOCK_HOSTNAME)
     })
 
-    it('should use configured region', () => {
-      expect((service as any).region).toBe(MOCK_REGION)
-    })
-
-    it('should default region to ap-northeast-1 when not set', async () => {
-      const module = await Test.createTestingModule({
-        providers: [
-          AppSyncEventsService,
-          {
-            provide: ConfigService,
-            useValue: makeConfigService({ APPSYNC_EVENTS_REGION: undefined }),
-          },
-        ],
-      }).compile()
-      const svc = module.get<AppSyncEventsService>(AppSyncEventsService)
-      expect((svc as any).region).toBe('ap-northeast-1')
-    })
-
-    it('should not create signer when endpoint is missing', async () => {
+    it('should not create signer or hostname when endpoint is missing', async () => {
       const module = await Test.createTestingModule({
         providers: [
           AppSyncEventsService,
