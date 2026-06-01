@@ -48,6 +48,34 @@ export function getDocumentationResources(): Resource[] {
       description: 'Security guidelines and best practices for the framework',
       mimeType: 'text/markdown',
     },
+    {
+      uri: 'mbc://docs/agents/readme',
+      name: 'Contributor Agent Reference',
+      description:
+        'Entry point for monorepo contributors and coding agents: packages, modules, services',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'mbc://docs/agents/package-graph',
+      name: 'Package Dependency Graph',
+      description:
+        'Inter-package dependencies and where to start changing code',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'mbc://docs/agents/inventory',
+      name: 'Module & Service Inventory',
+      description:
+        'Generated index of NestJS modules and services across all packages',
+      mimeType: 'text/markdown',
+    },
+    {
+      uri: 'mbc://docs/agents/core',
+      name: 'Core Package Overview',
+      description:
+        '@mbc-cqrs-serverless/core modules, services, and CQRS flows',
+      mimeType: 'text/markdown',
+    },
   ]
 }
 
@@ -97,6 +125,36 @@ export async function readDocumentation(
       break
     case 'mbc://docs/security':
       content = readFileSafe(path.join(frameworkRoot, 'SECURITY.md'))
+      mimeType = 'text/markdown'
+      break
+    case 'mbc://docs/agents/readme':
+      content = readFileSafe(
+        path.join(frameworkRoot, 'docs', 'agents', 'README.md'),
+      )
+      mimeType = 'text/markdown'
+      break
+    case 'mbc://docs/agents/package-graph':
+      content = readFileSafe(
+        path.join(frameworkRoot, 'docs', 'agents', 'package-graph.md'),
+      )
+      mimeType = 'text/markdown'
+      break
+    case 'mbc://docs/agents/inventory':
+      content = readFileSafe(
+        path.join(
+          frameworkRoot,
+          'docs',
+          'agents',
+          '_generated',
+          'module-service-index.md',
+        ),
+      )
+      mimeType = 'text/markdown'
+      break
+    case 'mbc://docs/agents/core':
+      content = readFileSafe(
+        path.join(frameworkRoot, 'docs', 'agents', 'core', 'overview.md'),
+      )
       mimeType = 'text/markdown'
       break
     default:

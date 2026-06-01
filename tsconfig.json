@@ -25,7 +25,7 @@
       "@mbc-cqrs-serverless/*": ["./packages/*/"]
     }
   },
-  "include": ["./packages/**/*", "./examples/**/*"],
+  "include": ["./packages/**/*", "./examples/**/*", "./scripts/**/*"],
   "exclude": [
     "node_modules",
     "**/test/**",

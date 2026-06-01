@@ -67,3 +67,14 @@ dynamodb-local-metadata.json
 # Claude Code files
 CLAUDE.md
 .claude/
+
+# cursor files
+.cursor/
+.cursorrules
+
+# agents files
+.agents/
+.agentsrules
+
+repomix-output.xml
+skills-lock.json

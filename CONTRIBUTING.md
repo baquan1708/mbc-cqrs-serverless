@@ -117,6 +117,14 @@ npm run format
 - Add JSDoc comments to public APIs
 - Update CHANGELOG.md for notable changes
 
+### AI-assisted contributions
+
+When using coding agents (Cursor, Claude Code, MCP, etc.) in this monorepo:
+
+1. Point the agent at [docs/agents/README.md](./docs/agents/README.md) for package boundaries and module/service relationships.
+2. After adding or renaming NestJS modules/services, run `npm run docs:agents:gen` and include `_generated/` updates in your PR.
+3. CI runs `npm run docs:agents:check` to ensure generated inventory matches the codebase.
+
 ## Testing
 
 ### Running Tests

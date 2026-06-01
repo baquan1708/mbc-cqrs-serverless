@@ -2,6 +2,12 @@
 
 This document provides guidance for AI coding assistants (GitHub Copilot, Codeium, Cursor, etc.) working with this codebase.
 
+## Start here (contributors)
+
+**Framework package/module/service map:** [docs/agents/README.md](./docs/agents/README.md)
+
+Read that tree before changing code under `packages/`. Regenerate inventory: `npm run docs:agents:gen`.
+
 ## Project Overview
 
 MBC CQRS Serverless is a TypeScript monorepo implementing the CQRS (Command Query Responsibility Segregation) pattern for AWS serverless architectures using NestJS.
@@ -221,6 +227,7 @@ mbc generate service NAME
 
 ## Related Files
 
+- [docs/agents/README.md](./docs/agents/README.md): Package/module/service map for contributors
 - [CLAUDE.md](./CLAUDE.md): Claude Code specific detailed guidance (Japanese)
 - [llms.txt](./llms.txt): Standard AI agent context file
 - [.cursorrules](./.cursorrules): Cursor IDE configuration

@@ -17,14 +17,19 @@ describe('MCP Resources', () => {
       expect(errorCatalog).toBeDefined()
       expect(errorCatalog?.name).toBe('Error Catalog')
 
+      const agentsReadme = resources.find(
+        (r) => r.uri === 'mbc://docs/agents/readme',
+      )
+      expect(agentsReadme).toBeDefined()
+
       // Check project resources
       const projectEntities = resources.find(
-        (r) => r.uri === 'mbc://project/entities'
+        (r) => r.uri === 'mbc://project/entities',
       )
       expect(projectEntities).toBeDefined()
 
       const projectModules = resources.find(
-        (r) => r.uri === 'mbc://project/modules'
+        (r) => r.uri === 'mbc://project/modules',
       )
       expect(projectModules).toBeDefined()
     })
@@ -45,10 +50,7 @@ describe('MCP Resources', () => {
     const projectPath = process.cwd()
 
     it('should read documentation resource', async () => {
-      const result = await handleResourceRead(
-        'mbc://docs/errors',
-        projectPath
-      )
+      const result = await handleResourceRead('mbc://docs/errors', projectPath)
 
       expect(result).toHaveProperty('contents')
       expect(Array.isArray(result.contents)).toBe(true)
@@ -57,10 +59,19 @@ describe('MCP Resources', () => {
       expect(result.contents[0]).toHaveProperty('text')
     })
 
+    it('should read contributor agent reference', async () => {
+      const result = await handleResourceRead(
+        'mbc://docs/agents/readme',
+        projectPath,
+      )
+
+      expect(result.contents[0].text).toContain('Contributor Agent Reference')
+    })
+
     it('should read project entities resource', async () => {
       const result = await handleResourceRead(
         'mbc://project/entities',
-        projectPath
+        projectPath,
       )
 
       expect(result).toHaveProperty('contents')
@@ -74,7 +85,7 @@ describe('MCP Resources', () => {
     it('should read project modules resource', async () => {
       const result = await handleResourceRead(
         'mbc://project/modules',
-        projectPath
+        projectPath,
       )
 
       expect(result).toHaveProperty('contents')
@@ -88,7 +99,7 @@ describe('MCP Resources', () => {
     it('should read project structure resource', async () => {
       const result = await handleResourceRead(
         'mbc://project/structure',
-        projectPath
+        projectPath,
       )
 
       expect(result).toHaveProperty('contents')
@@ -98,7 +109,7 @@ describe('MCP Resources', () => {
 
     it('should throw error for unknown resource', async () => {
       await expect(
-        handleResourceRead('mbc://unknown/resource', projectPath)
+        handleResourceRead('mbc://unknown/resource', projectPath),
       ).rejects.toThrow()
     })
   })

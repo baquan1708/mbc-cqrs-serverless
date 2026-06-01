@@ -17,6 +17,7 @@ MBC CQRS Serverless is a monorepo providing a complete framework for implementin
 - Full Documentation: https://mbc-cqrs-serverless.mbc-net.com/
 - Getting Started: https://mbc-cqrs-serverless.mbc-net.com/docs/getting-started
 - CLI Reference: https://mbc-cqrs-serverless.mbc-net.com/docs/cli
+- Contributor agent reference (monorepo): docs/agents/README.md
 
 ## Packages
 

@@ -13,6 +13,10 @@
     "lint": "eslint packages --ext .ts --ignore-pattern '**/dist/**' --ignore-pattern '**/schematics/**'",
     "format": "prettier --write \"packages/**/*.ts\"",
     "format:check": "prettier --check \"packages/**/*.ts\"",
+    "docs:agents:gen": "ts-node scripts/generate-agent-inventory.ts",
+    "docs:agents:check": "npm run docs:agents:gen && git diff --exit-code docs/agents/_generated",
+    "test:scripts": "NODE_ENV=test jest --config jest.scripts.config.js",
+    "test:agents-docs": "NODE_ENV=test jest --config jest.scripts.config.js scripts/check-agent-doc-links.spec.ts",
     "prepare": "husky"
   },
   "repository": {

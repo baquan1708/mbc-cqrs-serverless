@@ -1,0 +1,419 @@
+{
+  "generatedAt": "2026-05-21T07:33:46.488Z",
+  "packages": [
+    {
+      "name": "@mbc-cqrs-serverless/cli",
+      "directory": "packages/cli",
+      "description": "a CLI to get started with MBC CQRS serverless framework",
+      "dependencies": [],
+      "modules": [],
+      "services": [],
+      "exports": []
+    },
+    {
+      "name": "@mbc-cqrs-serverless/core",
+      "directory": "packages/core",
+      "description": "CQRS and event base core",
+      "dependencies": [],
+      "modules": [
+        {
+          "className": "AppModule",
+          "file": "packages/core/src/app.module.ts"
+        },
+        {
+          "className": "CommandModule",
+          "file": "packages/core/src/commands/command.module.ts"
+        },
+        {
+          "className": "DataStoreModule",
+          "file": "packages/core/src/data-store/data-store.module.ts"
+        },
+        {
+          "className": "DataSyncModule",
+          "file": "packages/core/src/command-events/data-sync.module.ts"
+        },
+        {
+          "className": "EventModule",
+          "file": "packages/core/src/events/event.module.ts"
+        },
+        {
+          "className": "NotificationModule",
+          "file": "packages/core/src/notifications/notification.module.ts"
+        },
+        {
+          "className": "QueueModule",
+          "file": "packages/core/src/queue/queue.module.ts"
+        },
+        {
+          "className": "StepFunctionModule",
+          "file": "packages/core/src/step-func/step-function.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "AppService",
+          "file": "packages/core/src/app.service.ts"
+        },
+        {
+          "className": "AppSyncEventsService",
+          "file": "packages/core/src/notifications/appsync-events.service.ts"
+        },
+        {
+          "className": "AppSyncService",
+          "file": "packages/core/src/notifications/appsync.service.ts"
+        },
+        {
+          "className": "CommandService",
+          "file": "packages/core/src/commands/command.service.ts"
+        },
+        {
+          "className": "DataService",
+          "file": "packages/core/src/commands/data.service.ts"
+        },
+        {
+          "className": "DynamoDbService",
+          "file": "packages/core/src/data-store/dynamodb.service.ts"
+        },
+        {
+          "className": "EmailService",
+          "file": "packages/core/src/notifications/email.service.ts"
+        },
+        {
+          "className": "ExplorerService",
+          "file": "packages/core/src/services/explorer.service.ts"
+        },
+        {
+          "className": "HistoryService",
+          "file": "packages/core/src/commands/history.service.ts"
+        },
+        {
+          "className": "OrderService",
+          "file": "packages/core/src/commands/data.service.ts"
+        },
+        {
+          "className": "S3Service",
+          "file": "packages/core/src/data-store/s3.service.ts"
+        },
+        {
+          "className": "SessionService",
+          "file": "packages/core/src/data-store/session.service.ts"
+        },
+        {
+          "className": "SnsService",
+          "file": "packages/core/src/queue/sns.service.ts"
+        },
+        {
+          "className": "SqsService",
+          "file": "packages/core/src/queue/sqs.service.ts"
+        },
+        {
+          "className": "StepFunctionService",
+          "file": "packages/core/src/step-func/step-function.service.ts"
+        },
+        {
+          "className": "TtlService",
+          "file": "packages/core/src/commands/ttl.service.ts"
+        }
+      ],
+      "exports": [
+        "./app.module",
+        "./bootstrap",
+        "./command-events",
+        "./commands",
+        "./constants",
+        "./context",
+        "./data-store",
+        "./decorators",
+        "./env.validation",
+        "./events",
+        "./exceptions",
+        "./filters",
+        "./guard",
+        "./helpers",
+        "./interfaces",
+        "./notifications",
+        "./pipe",
+        "./queue",
+        "./services",
+        "./step-func"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/directory",
+      "directory": "packages/directory",
+      "description": "Directory module",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core",
+        "@mbc-cqrs-serverless/master"
+      ],
+      "modules": [
+        {
+          "className": "DirectoryStorageModule",
+          "file": "packages/directory/src/directory.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "DirectoryFileService",
+          "file": "packages/directory/src/directory-file.service.ts"
+        },
+        {
+          "className": "DirectoryService",
+          "file": "packages/directory/src/directory.service.ts"
+        },
+        {
+          "className": "DynamoService",
+          "file": "packages/directory/src/dynamodb.service.ts"
+        }
+      ],
+      "exports": [
+        "./constant",
+        "./directory.controller",
+        "./directory.module",
+        "./directory.module-definition",
+        "./directory.service",
+        "./directory-file.service",
+        "./dto",
+        "./dynamodb.service",
+        "./entity"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/import",
+      "directory": "packages/import",
+      "description": "Import module",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core"
+      ],
+      "modules": [
+        {
+          "className": "ImportModule",
+          "file": "packages/import/src/import.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "ImportService",
+          "file": "packages/import/src/import.service.ts"
+        }
+      ],
+      "exports": [
+        "./constant",
+        "./dto",
+        "./entity",
+        "./enum",
+        "./event",
+        "./helpers",
+        "./import.controller",
+        "./import.module",
+        "./import.module-definition",
+        "./import.service",
+        "./interface"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/master",
+      "directory": "packages/master",
+      "description": " Master data management such as setting, sequence, etc.",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core",
+        "@mbc-cqrs-serverless/sequence",
+        "@mbc-cqrs-serverless/task"
+      ],
+      "modules": [
+        {
+          "className": "CustomTaskModule",
+          "file": "packages/master/src/custom-task/custom-task.module.ts"
+        },
+        {
+          "className": "MasterModule",
+          "file": "packages/master/src/master.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "MasterDataService",
+          "file": "packages/master/src/services/master-data.service.ts"
+        },
+        {
+          "className": "MasterSettingService",
+          "file": "packages/master/src/services/master-setting.service.ts"
+        },
+        {
+          "className": "MyTaskService",
+          "file": "packages/master/src/custom-task/my-task.service.ts"
+        }
+      ],
+      "exports": [
+        "./controllers",
+        "./custom-task/event/task-queue-event-factory",
+        "./decorators",
+        "./dto",
+        "./master.module",
+        "./services"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/mcp-server",
+      "directory": "packages/mcp-server",
+      "description": "MCP (Model Context Protocol) server for MBC CQRS Serverless framework - enables AI tools to interact with the framework",
+      "dependencies": [],
+      "modules": [],
+      "services": [],
+      "exports": []
+    },
+    {
+      "name": "@mbc-cqrs-serverless/sequence",
+      "directory": "packages/sequence",
+      "description": "Generate increment sequence with time-rotation",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core"
+      ],
+      "modules": [
+        {
+          "className": "SequencesModule",
+          "file": "packages/sequence/src/sequence.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "SequencesService",
+          "file": "packages/sequence/src/sequences.service.ts"
+        }
+      ],
+      "exports": [
+        "./dto",
+        "./enums/rotate-by.enum",
+        "./sequence.module",
+        "./sequences.controller",
+        "./sequences.service"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/survey-template",
+      "directory": "packages/survey-template",
+      "description": "Survey module",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core",
+        "@mbc-cqrs-serverless/master"
+      ],
+      "modules": [
+        {
+          "className": "SurveyTemplateModule",
+          "file": "packages/survey-template/src/survey-template.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "SurveyAnswerService",
+          "file": "packages/survey-template/src/survey-answer.service.ts"
+        },
+        {
+          "className": "SurveyTemplateService",
+          "file": "packages/survey-template/src/survey-template.service.ts"
+        }
+      ],
+      "exports": [
+        "./dto",
+        "./entity",
+        "./handler",
+        "./keys",
+        "./survey-answer.controller",
+        "./survey-answer.service",
+        "./survey-template.controller",
+        "./survey-template.module",
+        "./survey-template.module-definition",
+        "./survey-template.service",
+        "./utils"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/task",
+      "directory": "packages/task",
+      "description": "long-running task",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core"
+      ],
+      "modules": [
+        {
+          "className": "TaskModule",
+          "file": "packages/task/src/task.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "TaskService",
+          "file": "packages/task/src/task.service.ts"
+        }
+      ],
+      "exports": [
+        "./entity",
+        "./enums",
+        "./event",
+        "./interfaces",
+        "./task.controller",
+        "./task.module",
+        "./task.module-definition",
+        "./task.service"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/tenant",
+      "directory": "packages/tenant",
+      "description": "Multiple tenant management",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core"
+      ],
+      "modules": [
+        {
+          "className": "TenantModule",
+          "file": "packages/tenant/src/tenant.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "TenantService",
+          "file": "packages/tenant/src/services/tenant.service.ts"
+        }
+      ],
+      "exports": [
+        "./constants",
+        "./controllers",
+        "./services",
+        "./tenant.module"
+      ]
+    },
+    {
+      "name": "@mbc-cqrs-serverless/ui-setting",
+      "directory": "packages/ui-setting",
+      "description": "Setting master data",
+      "dependencies": [
+        "@mbc-cqrs-serverless/core"
+      ],
+      "modules": [
+        {
+          "className": "SettingModule",
+          "file": "packages/ui-setting/src/setting.module.ts"
+        }
+      ],
+      "services": [
+        {
+          "className": "DataSettingService",
+          "file": "packages/ui-setting/src/services/data-setting.service.ts"
+        },
+        {
+          "className": "SettingService",
+          "file": "packages/ui-setting/src/services/setting.service.ts"
+        }
+      ],
+      "exports": [
+        "./controllers",
+        "./dto",
+        "./entities",
+        "./helpers",
+        "./services",
+        "./setting.module"
+      ]
+    }
+  ]
+}

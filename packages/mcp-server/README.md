@@ -10,8 +10,12 @@ Access framework documentation and project information:
 
 | Resource URI | Description |
 |--------------|-------------|
-| `mbc://docs/overview` | Complete framework documentation |
+| `mbc://docs/overview` | Agent index (`llms-full.txt`) |
 | `mbc://docs/llms-short` | Concise framework summary |
+| `mbc://docs/agents/readme` | Contributor agent reference entry |
+| `mbc://docs/agents/package-graph` | Package dependency graph |
+| `mbc://docs/agents/inventory` | Generated module/service index |
+| `mbc://docs/agents/core` | Core package overview |
 | `mbc://docs/architecture` | CQRS architecture guide |
 | `mbc://docs/errors` | Error catalog with solutions |
 | `mbc://docs/faq` | Frequently asked questions |
